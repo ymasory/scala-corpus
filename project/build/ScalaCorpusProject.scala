@@ -1,6 +1,6 @@
 import sbt._
 
-class Project(info: ProjectInfo) extends DefaultProject(info) with ScalazBoilerplate with Exec {
+class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info) with ScalazBoilerplate with Exec {
 
   //project name
   override val artifactID = "scala-corpus"
