@@ -3,7 +3,7 @@
 This is large collection of Scala code being collected for testing static analysis tools such as [Alacs](https://github.com/alacscala/alacs).
 
 ## currently included projects ##
-- scalaz
+- [scalaz](http://code.google.com/p/scalaz/) (16k)
 
 ## building  ##
 This collection is built using [sbt](http://code.google.com/p/simple-build-tool/).
