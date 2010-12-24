@@ -10,7 +10,7 @@ This collection is built using [sbt](http://code.google.com/p/simple-build-tool/
     sbt update
     sbt compile
 
-NOTE: scala-corpus cannot be built on Linux due to a [known bug](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac`.
+NOTE: Some systems may not be able to build scala-corpus due to a [known bug](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac` concerning file name lengths.
 
 ## project we would like to include ##
 * [scala](https://github.com/scala/scala) (282k lines)
