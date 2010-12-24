@@ -15,8 +15,10 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 ## project we would like to include ##
 * [scala](https://github.com/scala/scala) (282k lines)
 * [lift](https://github.com/lift/lift) (102k)
+* [scalate](https://github.com/scalate/scalate) (29k)
 * [akka](https://github.com/jboner/akka) (24k)
 * [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (18k)
+* [squeryl](https://github.com/max-l/Squeryl)  (15k)
 * [kafka](https://github.com/kafka-dev/kafka) (11k)
 * [circumflex](https://github.com/inca/circumflex) (10k)
 * [scalala](http://code.google.com/p/scalala/) (8k)
