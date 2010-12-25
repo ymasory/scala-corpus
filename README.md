@@ -6,6 +6,7 @@ This is large collection of Scala code being collected for testing static analys
 * [scalaz](http://code.google.com/p/scalaz/) (18k lines)
 * [squeryl](https://github.com/max-l/Squeryl)  (15k)
 * [scala-query](https://github.com/szeiger/scala-query) (9k)
+* [scala-swing](https://github.com/ingoem/scala-swing) (6k)
 
 ## building  ##
 This collection is built using [sbt](http://code.google.com/p/simple-build-tool/).
