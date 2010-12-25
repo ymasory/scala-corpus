@@ -3,7 +3,7 @@
 This is large collection of Scala code being collected for testing static analysis tools such as [Alacs](https://github.com/alacscala/alacs).
 
 ## currently included projects ##
-- [scalaz](http://code.google.com/p/scalaz/) (16k lines)
+- [scalaz](http://code.google.com/p/scalaz/) (18k lines)
 * [scala-query](https://github.com/szeiger/scala-query) (9k)
 
 ## building  ##

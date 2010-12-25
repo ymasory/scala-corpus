@@ -19,6 +19,8 @@ class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info)  with E
 
   class ScalazProject(info: ProjectInfo) extends DefaultProject(info) with ScalazBoilerplate {
     val servlets = "javax.servlet" % "servlet-api" % "2.5" withSources
+    val scalacheck = "org.scala-tools.testing" % "scalacheck_2.8.1" % "1.8" % "test"
+    val specs = "org.scala-tools.testing" % "specs" % "1.6.2.2" % "test"
     override def mainSourceRoots = super.mainSourceRoots +++ srcManagedScala##
     override def compileAction = super.compileAction dependsOn(generateTupleW)
   }
