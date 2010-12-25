@@ -14,8 +14,14 @@ class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info)  with E
   // override def libraryDependencies = Set()
 
   //projects
-  lazy val scalaz = project("scalaz", "scalaz", new ScalazProject(_))
-  // lazy val scalaquery = project("scala-query", "scala-query", new ScalaQueryProject(_))
+  lazy val scalaz = project("scalaz", "scalaz", new ScalazProject(_)) //git 32757b4ed1f59dfbd121c9e483f06dada46ff792
+  lazy val scalaquery = project("scala-query", "scala-query", new ScalaQueryProject(_)) //git 0b9f9adfa15716ba4e5a659324000706ee1e42f7
+  lazy val squeryl = project("squeryl", "squeryl", new SquerylProject(_)) //git 0286ac918fd2e74f8f65e1cafe693e4d8f15f4ec
+
+  class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
+    val cglib = "cglib" % "cglib-nodep" % "2.2"
+    val specs = "org.scala-tools.testing" % "specs_2.8.0" % "1.6.5" % "provided"  
+  }
 
   class ScalazProject(info: ProjectInfo) extends DefaultProject(info) with ScalazBoilerplate {
     val servlets = "javax.servlet" % "servlet-api" % "2.5" withSources
