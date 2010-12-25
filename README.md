@@ -21,6 +21,7 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 * [squeryl](https://github.com/max-l/Squeryl)  (15k)
 * [kafka](https://github.com/kafka-dev/kafka) (11k)
 * [circumflex](https://github.com/inca/circumflex) (10k)
+* [scala-query](https://github.com/szeiger/scala-query) (9k)
 * [scalala](http://code.google.com/p/scalala/) (8k)
 * [configgy](https://github.com/robey/configgy) (6k)
 * [flockdb](https://github.com/twitter/flockdb) (6k)
