@@ -29,6 +29,7 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 * [akka-modules](https://github.com/jboner/akka-modules) (15k)
 * [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
 * [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (15k)
+* [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
 * [scalanlp](https://github.com/dlwh/scalanlp-core) (13k)
 * [scala-ide](http://www.assembla.com/wiki/show/scala-ide/Source_Code) (12k)
 * [uniscala](http://uniscala.net/mvn/source-repository.html) (10k)
