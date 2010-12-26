@@ -32,6 +32,8 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 * [scala-ide](http://www.assembla.com/wiki/show/scala-ide/Source_Code) (12k)
 * [uniscala](http://uniscala.net/mvn/source-repository.html) (10k)
 * [kiama](http://code.google.com/p/kiama/source/checkout) (10k)
+
+## too small for now ##
 * [scalariform](https://github.com/mdr/scalariform) (8k)
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
