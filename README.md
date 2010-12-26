@@ -23,6 +23,7 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 * [lift](https://github.com/lift/lift) (58k)
 * [scalatest](http://www.scalatest.org/download) (50k)
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
+* [apparat](http://code.google.com/p/apparat/source/checkout) (18k)
 * [scalate](https://github.com/scalate/scalate) (16k)
 * [akka](https://github.com/jboner/akka) (15k)
 * [akka-modules](https://github.com/jboner/akka-modules) (15k)
