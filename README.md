@@ -36,6 +36,9 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 * [kiama](http://code.google.com/p/kiama/source/checkout) (10k)
 * [scala-refactoring](http://www.assembla.com/code/scala-refactoring/git/nodes?rev=master) (10k)
 
+## will not compile with >= 2.8.0 ##
+* [configgy](https://github.com/robey/configgy) (4k)
+
 ## too small for now ##
 * [scalariform](https://github.com/mdr/scalariform) (8k)
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
@@ -45,6 +48,6 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 * [ensime](https://github.com/aemoncannon/ensime) (5k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
-* [configgy](https://github.com/robey/configgy) (4k)
 * [flockdb](https://github.com/twitter/flockdb) (4k)
 * [smile](https://github.com/robey/smile) (3k)
+
