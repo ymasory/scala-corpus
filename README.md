@@ -31,7 +31,6 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [akka](https://github.com/jboner/akka) (15k)
 * [akka-modules](https://github.com/jboner/akka-modules) (15k)
 * [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
-* [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (15k)
 * [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
 * [scalanlp](https://github.com/dlwh/scalanlp-core) (13k)
 * [scala-ide](http://www.assembla.com/wiki/show/scala-ide/Source_Code) (12k)
@@ -46,9 +45,10 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 
 ## cannot include: require external dependencies ##
-* [flockdb](https://github.com/twitter/flockdb) (4k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
+* [flockdb](https://github.com/twitter/flockdb) (4k)
 
 ## cannot include: will not compile with >= 2.8.0 ##
+* [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (15k)
 * [configgy](https://github.com/robey/configgy) (4k)
 
