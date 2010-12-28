@@ -23,7 +23,6 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 
 ## project we would like to include ##
 * [scala](https://github.com/scala/scala) (177k lines)
-* [scala-intellij](http://git.jetbrains.org/?p=idea/scala-plugin.git) (67k)
 * [lift](https://github.com/lift/lift) (58k)
 * [scalatest](http://www.scalatest.org/download) (50k)
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
@@ -44,6 +43,7 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 
 ## cannot include: require external dependencies ##
+* [scala-intellij](http://git.jetbrains.org/?p=idea/scala-plugin.git) (67k)
 * [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
 * [flockdb](https://github.com/twitter/flockdb) (4k)
