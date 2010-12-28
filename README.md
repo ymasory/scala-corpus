@@ -38,8 +38,6 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [uniscala](http://uniscala.net/mvn/source-repository.html) (10k)
 * [kiama](http://code.google.com/p/kiama/source/checkout) (10k)
 * [scala-refactoring](http://www.assembla.com/code/scala-refactoring/git/nodes?rev=master) (10k)
-
-## too small for now ##
 * [scalariform](https://github.com/mdr/scalariform) (8k)
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
