@@ -1,9 +1,6 @@
 import sbt._
 
-class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info)  with Exec {
-
-  //project name
-  override val artifactID = "scala-corpus"
+class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info) with Exec {
 
   //turn down logging level to 'warn'
   log.setLevel(Level.Warn)
@@ -18,6 +15,21 @@ class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info)  with E
   lazy val scalaswing = project("scala-swing", "scala-swing", new ScalaSwingProject(_)) /* git 5b45ba65a6afa15b6083bc4c0654d551a379e9a3 */
   lazy val ensime = project("ensime", "ensime", new EnsimeProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
   lazy val flashup = project("flashup", "flashup", new FlashupProject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
+  lazy val smile = project("smile", "smile", new SmileProject(_)) /* git ee41070f87e2a99b2556ebde6b505c3dd54e7b88 */
+
+  class SmileProject(info: ProjectInfo) extends com.twitter.sbt.StandardProject(info) {
+    val specs = "org.scala-tools.testing" % "specs_2.8.0" % "1.6.5" % "provided"
+    val xrayspecs = "com.twitter" %% "xrayspecs_2.8.0" % "2.0"
+    val vscaladoc = "org.scala-tools" % "vscaladoc" % "1.1-md-3"
+    val hamcrest  = "org.hamcrest" % "hamcrest-all" % "1.1"
+    val jmock     = "org.jmock" % "jmock" % "2.4.0"
+    val objenesis = "org.objenesis" % "objenesis" % "1.1"
+    val configgy = "net.lag" % "configgy" % "2.0.0"
+    val naggati = "net.lag" %% "naggati" % "0.7.4"
+    val mina = "org.apache.mina" % "mina-core" % "2.0.0-M6"
+    val slf4j_api = "org.slf4j" % "slf4j-api" % "1.5.2"
+    val slf4j_jdk14 = "org.slf4j" % "slf4j-jdk14" % "1.5.2"
+  }
 
   class FlashupProject(info: ProjectInfo) extends DefaultProject(info) {
     val scalatest = "org.scalatest" % "scalatest" % "1.2"
