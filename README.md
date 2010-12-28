@@ -17,6 +17,7 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
 * [ensime](https://github.com/aemoncannon/ensime) (5k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
+* [smile](https://github.com/robey/smile) (3k)
 * [flashup](https://github.com/ymasory/Flashup) (1k)
 
 ## project we would like to include ##
@@ -47,7 +48,6 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [gizzard](https://github.com/twitter/gizzard) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 * [flockdb](https://github.com/twitter/flockdb) (4k)
-* [smile](https://github.com/robey/smile) (3k)
 
 ## will not compile with >= 2.8.0 ##
 * [configgy](https://github.com/robey/configgy) (4k)
