@@ -12,6 +12,7 @@ This collection is built using [sbt](http://code.google.com/p/simple-build-tool/
 NOTE: Some systems may not be able to build every sub-project due to a [known bug](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac` concerning file name lengths.
 
 ## currently included projects ##
+* [akka](https://github.com/jboner/akka) (15k)
 * [scalaz](https://github.com/scalaz/scalaz) (12k lines)
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
@@ -28,7 +29,6 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
 * [apparat](http://code.google.com/p/apparat/source/checkout) (18k)
 * [scalate](https://github.com/scalate/scalate) (16k)
-* [akka](https://github.com/jboner/akka) (15k)
 * [akka-modules](https://github.com/jboner/akka-modules) (15k)
 * [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
 * [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
