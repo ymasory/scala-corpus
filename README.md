@@ -4,18 +4,19 @@ This is large collection of Scala code being collected for testing static analys
 
 Line counts are generated using [cloc](http://cloc.sourceforge.net/).
 
-## currently included projects ##
-* [scalaz](https://github.com/scalaz/scalaz) (12k lines)
-* [squeryl](https://github.com/max-l/Squeryl)  (9k)
-* [scala-query](https://github.com/szeiger/scala-query) (7k)
-* [scala-swing](https://github.com/ingoem/scala-swing) (4k)
-
 ## building  ##
 This collection is built using [sbt](http://code.google.com/p/simple-build-tool/).
     sbt update
     sbt test-compile
 
-NOTE: Some systems may not be able to build scala-corpus due to a [known bug](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac` concerning file name lengths.
+NOTE: Some systems may not be able to build every sub-project due to a [known bug](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac` concerning file name lengths.
+
+## currently included projects ##
+* [scalaz](https://github.com/scalaz/scalaz) (12k lines)
+* [squeryl](https://github.com/max-l/Squeryl)  (9k)
+* [scala-query](https://github.com/szeiger/scala-query) (7k)
+* [ensime](https://github.com/aemoncannon/ensime) (5k)
+* [scala-swing](https://github.com/ingoem/scala-swing) (4k)
 
 ## project we would like to include ##
 * [scala](https://github.com/scala/scala) (177k lines)
@@ -36,18 +37,17 @@ NOTE: Some systems may not be able to build scala-corpus due to a [known bug](ht
 * [kiama](http://code.google.com/p/kiama/source/checkout) (10k)
 * [scala-refactoring](http://www.assembla.com/code/scala-refactoring/git/nodes?rev=master) (10k)
 
-## will not compile with >= 2.8.0 ##
-* [configgy](https://github.com/robey/configgy) (4k)
-
 ## too small for now ##
 * [scalariform](https://github.com/mdr/scalariform) (8k)
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
 * [scalaxb](https://github.com/eed3si9n/scalaxb) (6k)
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
-* [ensime](https://github.com/aemoncannon/ensime) (5k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 * [flockdb](https://github.com/twitter/flockdb) (4k)
 * [smile](https://github.com/robey/smile) (3k)
+
+## will not compile with >= 2.8.0 ##
+* [configgy](https://github.com/robey/configgy) (4k)
 

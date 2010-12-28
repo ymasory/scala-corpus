@@ -16,6 +16,21 @@ class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info)  with E
   lazy val scalaquery = project("scala-query", "scala-query", new ScalaQueryProject(_)) /* git 0b9f9adfa15716ba4e5a659324000706ee1e42f7 */
   lazy val squeryl = project("squeryl", "squeryl", new SquerylProject(_)) /* git 0286ac918fd2e74f8f65e1cafe693e4d8f15f4ec */
   lazy val scalaswing = project("scala-swing", "scala-swing", new ScalaSwingProject(_)) /* git 5b45ba65a6afa15b6083bc4c0654d551a379e9a3 */
+  lazy val ensime = project("ensime", "ensime", new EnsimeProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
+
+  class EnsimeProject(info: ProjectInfo) extends DefaultProject(info) {
+    val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
+    val jbossRepo = "JBoss Maven 2 Repo" at "http://repository.jboss.org/maven2"
+    val ant = "org.apache.ant" % "ant" % "1.8.1" % "compile;runtime;test"
+    val ivy = "org.apache.ivy" % "ivy" % "2.1.0" % "compile;runtime;test"
+    val maven = "org.apache.maven" % "maven-ant-tasks" % "2.1.0" % "compile;runtime;test"
+    val scalatest = "org.scalatest" % "scalatest" % "1.2" % "test"
+    val jdt = "org.eclipse.jdt" % "core" % "3.4.2.v_883_R34x" % "compile;runtime;test"
+    val scalariform = "org.scalariform" % "scalariform_2.8.0" % "0.0.7"%"compile;runtime;test"
+    val refactoring = "org.scala-refactoring" % "org.scala-refactoring.library" % "compile;runtime;test" from "http://scala-tools.org/repo-snapshots/org/scala-refactoring/org.scala-refactoring.library/0.3.0-SNAPSHOT/org.scala-refactoring.library-0.3.0-20101213.203503-7.jar"
+    val asm = "asm" % "asm" % "3.2"
+    val asmCommons = "asm" % "asm-commons" % "3.2"
+  }
 
   class ScalaSwingProject(info: ProjectInfo) extends DefaultProject(info)
 
