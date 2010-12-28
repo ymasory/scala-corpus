@@ -45,8 +45,10 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
+
+## cannot include: require external dependencies ##
 * [flockdb](https://github.com/twitter/flockdb) (4k)
 
-## will not compile with >= 2.8.0 ##
+## cannot include: will not compile with >= 2.8.0 ##
 * [configgy](https://github.com/robey/configgy) (4k)
 
