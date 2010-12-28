@@ -17,6 +17,7 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
 * [ensime](https://github.com/aemoncannon/ensime) (5k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
+* [flashup](https://github.com/ymasory/Flashup) (1k)
 
 ## project we would like to include ##
 * [scala](https://github.com/scala/scala) (177k lines)

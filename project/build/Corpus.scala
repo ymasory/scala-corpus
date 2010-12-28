@@ -17,6 +17,12 @@ class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info)  with E
   lazy val squeryl = project("squeryl", "squeryl", new SquerylProject(_)) /* git 0286ac918fd2e74f8f65e1cafe693e4d8f15f4ec */
   lazy val scalaswing = project("scala-swing", "scala-swing", new ScalaSwingProject(_)) /* git 5b45ba65a6afa15b6083bc4c0654d551a379e9a3 */
   lazy val ensime = project("ensime", "ensime", new EnsimeProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
+  lazy val flashup = project("flashup", "flashup", new FlashupProject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
+
+  class FlashupProject(info: ProjectInfo) extends DefaultProject(info) {
+    val scalatest = "org.scalatest" % "scalatest" % "1.2"
+    val jsap = "com.martiansoftware" % "jsap" % "2.1"
+  }
 
   class EnsimeProject(info: ProjectInfo) extends DefaultProject(info) {
     val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"

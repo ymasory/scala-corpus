@@ -1,0 +1,220 @@
+Index: src/core/com/itextpdf/text/DocWriter.java
+===================================================================
+--- src/core/com/itextpdf/text/DocWriter.java	(revision 4594)
++++ src/core/com/itextpdf/text/DocWriter.java	(working copy)
+@@ -130,6 +130,10 @@
+         this.os = new OutputStreamCounter(new BufferedOutputStream(os));
+     }
+ 
++    public Document getDocument() {
++        return document;
++    }
++
+     // implementation of the DocListener methods
+ 
+ /**
+Index: src/core/com/itextpdf/text/Document.java
+===================================================================
+--- src/core/com/itextpdf/text/Document.java	(revision 4594)
++++ src/core/com/itextpdf/text/Document.java	(working copy)
+@@ -174,6 +174,12 @@
+     /** This is a chapter number in case ChapterAutoNumber is used. */
+     protected int chapternumber = 0;
+ 
++    private String uniqueID = null;
++
++    public String getUniqueID() {
++        return uniqueID;
++    }
++
+     // constructor
+ 
+ 	/**
+@@ -184,6 +190,11 @@
+         this(PageSize.A4);
+     }
+ 
++    public Document(String uniqueID) {
++        this();
++        this.uniqueID = uniqueID;
++    }
++
+ 	/**
+ 	 * Constructs a new <CODE>Document</CODE> -object.
+  *
+@@ -194,6 +205,10 @@
+     public Document(Rectangle pageSize) {
+         this(pageSize, 36, 36, 36, 36);
+     }
++    public Document(Rectangle pageSize, String uniqueID) {
++        this(pageSize);
++        this.uniqueID = uniqueID;
++    }
+ 
+ 	/**
+ 	 * Constructs a new <CODE>Document</CODE> -object.
+@@ -219,6 +234,12 @@
+         this.marginBottom = marginBottom;
+     }
+ 
++	public Document(Rectangle pageSize, float marginLeft, float marginRight,
++                    float marginTop, float marginBottom, String uniqueID) {
++        this(pageSize, marginLeft, marginRight, marginTop, marginBottom);
++        this.uniqueID = uniqueID;
++    }
++
+     // listener methods
+ 
+ 	/**
+Index: src/core/com/itextpdf/text/pdf/PdfDocument.java
+===================================================================
+--- src/core/com/itextpdf/text/pdf/PdfDocument.java	(revision 4594)
++++ src/core/com/itextpdf/text/pdf/PdfDocument.java	(working copy)
+@@ -112,7 +112,6 @@
+         PdfInfo() {
+             super();
+             addProducer();
+-            addCreationDate();
+         }
+ 
+         /**
+@@ -188,16 +187,6 @@
+             put(PdfName.PRODUCER, new PdfString(getVersion()));
+         }
+ 
+-        /**
+-         * Adds the date of creation to the document.
+-         */
+-
+-        void addCreationDate() {
+-            PdfString date = new PdfDate();
+-            put(PdfName.CREATIONDATE, date);
+-            put(PdfName.MODDATE, date);
+-        }
+-
+         void addkey(String key, String value) {
+             if (key.equals("Producer") || key.equals("CreationDate"))
+                 return;
+@@ -311,7 +300,6 @@
+     public PdfDocument() {
+         super();
+         addProducer();
+-        addCreationDate();
+     }
+ 
+     /** The <CODE>PdfWriter</CODE>. */
+@@ -423,8 +411,6 @@
+                     info.addProducer();
+                     break;
+                 case Element.CREATIONDATE:
+-                    // you can not set the creation date, only reset it
+-                    info.addCreationDate();
+                     break;
+ 
+                 // content (text)
+Index: src/core/com/itextpdf/text/pdf/BaseFont.java
+===================================================================
+--- src/core/com/itextpdf/text/pdf/BaseFont.java	(revision 4594)
++++ src/core/com/itextpdf/text/pdf/BaseFont.java	(working copy)
+@@ -1110,9 +1110,10 @@
+      * @return the subset prefix
+      */
+     public static String createSubsetPrefix() {
++        java.util.Random rand = new java.util.Random(0);
+         String s = "";
+         for (int k = 0; k < 6; ++k)
+-            s += (char)(Math.random() * 26 + 'A');
++            s += (char)(rand.nextDouble() * 26 + 'A');
+         return s + "+";
+     }
+ 
+Index: src/core/com/itextpdf/text/pdf/PdfWriter.java
+===================================================================
+--- src/core/com/itextpdf/text/pdf/PdfWriter.java	(revision 4594)
++++ src/core/com/itextpdf/text/pdf/PdfWriter.java	(working copy)
+@@ -47,6 +47,7 @@
+ import java.io.IOException;
+ import java.io.OutputStream;
+ import java.security.cert.Certificate;
++import java.security.MessageDigest;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.HashMap;
+@@ -107,6 +108,8 @@
+ 	 */
+ 	public static final int GENERATION_MAX = 65535;
+ 
++    private static String uniqueID = null;
++
+ // INNER CLASSES
+ 
+     /**
+@@ -610,6 +613,7 @@
+ 
+     public static PdfWriter getInstance(Document document, OutputStream os)
+     throws DocumentException {
++        uniqueID = document.getUniqueID();
+         PdfDocument pdf = new PdfDocument();
+         document.addDocListener(pdf);
+         PdfWriter writer = new PdfWriter(pdf, os);
+@@ -629,6 +633,7 @@
+ 
+     public static PdfWriter getInstance(Document document, OutputStream os, DocListener listener)
+     throws DocumentException {
++        uniqueID = document.getUniqueID();
+         PdfDocument pdf = new PdfDocument();
+         pdf.addDocListener(listener);
+         document.addDocListener(pdf);
+@@ -1212,8 +1217,23 @@
+                     encryption = encryptionObject.getIndirectReference();
+                     fileID = crypto.getFileID();
+                 }
+-                else
+-                    fileID = PdfEncryption.createInfoId(PdfEncryption.createDocumentId());
++                else {
++                    byte[] uniqueIDBytes = null;
++                    if (uniqueID != null) {
++                        uniqueIDBytes = uniqueID.getBytes();
++                    }
++                    else {
++                        uniqueIDBytes = PdfEncryption.createDocumentId();
++                    }
++                    try {
++                        MessageDigest md5 = MessageDigest.getInstance("MD5");
++                        byte[] hash = md5.digest(uniqueIDBytes);
++                        fileID = PdfEncryption.createInfoId(hash, hash);
++                    }
++                    catch(Exception e) {
++                        e.printStackTrace();
++                    }
++                }
+ 
+                 // write the cross-reference table of the body
+                 body.writeCrossReferenceTable(os, indirectCatalog.getIndirectReference(),
+Index: src/core/com/itextpdf/text/pdf/PdfEncryption.java
+===================================================================
+--- src/core/com/itextpdf/text/pdf/PdfEncryption.java	(revision 4594)
++++ src/core/com/itextpdf/text/pdf/PdfEncryption.java	(working copy)
+@@ -395,12 +395,21 @@
+ 	}
+ 
+ 	public static PdfObject createInfoId(byte id[]) {
++        return createInfoId(id, null);
++	}
++
++	public static PdfObject createInfoId(byte id[], byte[] docId) {
+ 		ByteBuffer buf = new ByteBuffer(90);
+ 		buf.append('[').append('<');
+ 		for (int k = 0; k < 16; ++k)
+ 			buf.appendHex(id[k]);
+ 		buf.append('>').append('<');
+-		id = createDocumentId();
++        if (docId != null) {
++            id = docId;
++        }
++        else {
++            id = createDocumentId();
++        }
+ 		for (int k = 0; k < 16; ++k)
+ 			buf.appendHex(id[k]);
+ 		buf.append('>').append(']');
