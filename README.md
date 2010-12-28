@@ -30,7 +30,6 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [apparat](http://code.google.com/p/apparat/source/checkout) (18k)
 * [scalate](https://github.com/scalate/scalate) (16k)
 * [akka-modules](https://github.com/jboner/akka-modules) (15k)
-* [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
 * [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
 * [scalanlp](https://github.com/dlwh/scalanlp-core) (13k)
 * [scala-ide](http://www.assembla.com/wiki/show/scala-ide/Source_Code) (12k)
@@ -45,6 +44,7 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 
 ## cannot include: require external dependencies ##
+* [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
 * [flockdb](https://github.com/twitter/flockdb) (4k)
 
