@@ -41,7 +41,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scalaxb](https://github.com/eed3si9n/scalaxb) (6k)
 * [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
-* [swap-scala](http://code.google.com/p/swap-scala/source/checkout) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 * [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
@@ -54,5 +53,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 
 ## cannot include: will not compile with >= 2.8.0 ##
 * [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (15k)
+* [swap-scala](http://code.google.com/p/swap-scala/source/checkout) (5k)
 * [configgy](https://github.com/robey/configgy) (4k)
 
