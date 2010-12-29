@@ -28,6 +28,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
 * [apparat](http://code.google.com/p/apparat/source/checkout) (18k)
 * [scalate](https://github.com/scalate/scalate) (16k)
+* [sgine](hg clone https://sgine.googlecode.com/hg/ sgine) (16k)
 * [akka-modules](https://github.com/jboner/akka-modules) (15k)
 * [gapt](http://code.google.com/p/gapt/source/checkout) (14k)
 * [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
