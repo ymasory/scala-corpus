@@ -20,7 +20,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [smile](https://github.com/robey/smile) (3k)
 * [flashup](https://github.com/ymasory/Flashup) (1k)
 
-## project we would like to include ##
+## project we are working on adding ##
 * [scala](https://github.com/scala/scala) (177k)
 * [lift](https://github.com/lift/lift) (58k)
 * [scalatest](http://www.scalatest.org/download) (50k)
@@ -46,7 +46,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
-## cannot include: require external dependencies ##
+## cannot include: require some dependencies pre-installed on build system ##
 * [scala-intellij](http://git.jetbrains.org/?p=idea/scala-plugin.git) (67k)
 * [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
