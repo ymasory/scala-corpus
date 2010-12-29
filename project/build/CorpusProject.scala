@@ -19,7 +19,7 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
   lazy val scalaz = project("scalaz", "scalaz", new DefaultProject(_) with ScalazBoilerplate { /* git 32757b4ed1f59dfbd121c9e483f06dada46ff792 */
     override def mainSourceRoots = super.mainSourceRoots +++ srcManagedScala##
     override def compileAction = super.compileAction dependsOn(generateTupleW)
-  }) 
+  })
   lazy val scalaswing = project("scala-swing", "scala-swing", new DefaultProject(_)) /* git 5b45ba65a6afa15b6083bc4c0654d551a379e9a3 */
   lazy val scalaquery = project("scala-query", "scala-query", new DefaultProject(_)) /* git 0b9f9adfa15716ba4e5a659324000706ee1e42f7 */
   lazy val smile = project("smile", "smile", new com.twitter.sbt.StandardProject(_)) /* git ee41070f87e2a99b2556ebde6b505c3dd54e7b88 */
