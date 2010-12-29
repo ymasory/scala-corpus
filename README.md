@@ -18,6 +18,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [casbah](https://github.com/mongodb/casbah) (4k)
 * [ensime](https://github.com/aemoncannon/ensime) (4k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
+* [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [smile](https://github.com/robey/smile) (3k)
 * [flashup](https://github.com/ymasory/Flashup) (1k)
 
@@ -45,7 +46,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
 * [norbert](https://github.com/rhavyn/norbert) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
-* [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
 ## cannot include: require some dependencies pre-installed on build system ##
