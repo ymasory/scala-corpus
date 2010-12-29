@@ -12,7 +12,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 
 ## currently included projects ##
 * [akka](https://github.com/jboner/akka) (15k)
-* [scalaz](https://github.com/scalaz/scalaz) (12k lines)
+* [scalaz](https://github.com/scalaz/scalaz) (12k)
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
 * [ensime](https://github.com/aemoncannon/ensime) (5k)
@@ -21,7 +21,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [flashup](https://github.com/ymasory/Flashup) (1k)
 
 ## project we would like to include ##
-* [scala](https://github.com/scala/scala) (177k lines)
+* [scala](https://github.com/scala/scala) (177k)
 * [lift](https://github.com/lift/lift) (58k)
 * [scalatest](http://www.scalatest.org/download) (50k)
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
