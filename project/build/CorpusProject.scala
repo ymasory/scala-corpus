@@ -14,6 +14,12 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
       lazy val akka_sample_remote = project("akka-sample-remote", "akka-sample-remote", new DefaultProject(_), akka_remote)
     })
   })
+  lazy val casbah = project("casbah", "casbah", new DefaultProject(_) { /* git 4c4e62442ba4bdf55388b139acb27e2d871dbe11 */
+    lazy val commons = project("casbah-commons", "casbah-commons", new DefaultProject(_))
+    lazy val core = project("casbah-core", "casbah-core", new DefaultProject(_), commons, query)
+    lazy val query = project("casbah-query", "casbah-query", new DefaultProject(_), commons)
+    lazy val gridfs = project("casbah-gridfs","casbah-gridfs", new DefaultProject(_), core)
+  })
   //lazy val ensime = project("ensime", "ensime", new DefaultProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
   lazy val flashup = project("flashup", "flashup", new DefaultProject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
   lazy val scalaz = project("scalaz", "scalaz", new DefaultProject(_) with ScalazBoilerplate { /* git 32757b4ed1f59dfbd121c9e483f06dada46ff792 */

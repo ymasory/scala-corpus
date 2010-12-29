@@ -16,6 +16,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
 * [ensime](https://github.com/aemoncannon/ensime) (5k)
+* [casbah](https://github.com/mongodb/casbah) (4k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
 * [smile](https://github.com/robey/smile) (3k)
 * [flashup](https://github.com/ymasory/Flashup) (1k)
