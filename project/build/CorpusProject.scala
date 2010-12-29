@@ -23,7 +23,8 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
   })
   lazy val ensime = project("ensime", "ensime", new CorpusSubproject(_)) /* git d3a4de5805e2b98fd0cb15783af6a6d4b83d535c */
   lazy val flashup = project("flashup", "flashup", new CorpusSubproject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
-  lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_))
+  
+  lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_)) /* hg 376:23c7b8ffc0f1 */
   lazy val scalaz = project("scalaz", "scalaz", new CorpusSubproject(_) with ScalazBoilerplate { /* git 32757b4ed1f59dfbd121c9e483f06dada46ff792 */
     override def mainSourceRoots = super.mainSourceRoots +++ srcManagedScala##
     override def compileAction = super.compileAction dependsOn(generateTupleW)
