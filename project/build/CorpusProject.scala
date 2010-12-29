@@ -20,7 +20,6 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
     lazy val query = project("casbah-query", "casbah-query", new DefaultProject(_), commons)
     lazy val gridfs = project("casbah-gridfs","casbah-gridfs", new DefaultProject(_), core)
   })
-  //lazy val ensime = project("ensime", "ensime", new DefaultProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
   lazy val flashup = project("flashup", "flashup", new DefaultProject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
   lazy val scalaz = project("scalaz", "scalaz", new DefaultProject(_) with ScalazBoilerplate { /* git 32757b4ed1f59dfbd121c9e483f06dada46ff792 */
     override def mainSourceRoots = super.mainSourceRoots +++ srcManagedScala##
@@ -30,4 +29,8 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
   lazy val scalaquery = project("scala-query", "scala-query", new DefaultProject(_)) /* git 0b9f9adfa15716ba4e5a659324000706ee1e42f7 */
   lazy val smile = project("smile", "smile", new com.twitter.sbt.StandardProject(_)) /* git ee41070f87e2a99b2556ebde6b505c3dd54e7b88 */
   lazy val squeryl = project("squeryl", "squeryl", new DefaultProject(_)) /* git 0286ac918fd2e74f8f65e1cafe693e4d8f15f4ec */
+
+  // REQUIRE 2.8.1
+  //lazy val ensime = project("ensime", "ensime", new DefaultProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
+
 }

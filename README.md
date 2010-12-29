@@ -15,7 +15,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scalaz](https://github.com/scalaz/scalaz) (12k)
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
-* [ensime](https://github.com/aemoncannon/ensime) (5k)
 * [casbah](https://github.com/mongodb/casbah) (4k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
 * [smile](https://github.com/robey/smile) (3k)
@@ -47,13 +46,16 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
+## cannot include at the moment: require >= 2.8.1 ##
+* [ensime](https://github.com/aemoncannon/ensime) (5k)
+
 ## cannot include: require some dependencies pre-installed on build system ##
 * [scala-intellij](http://git.jetbrains.org/?p=idea/scala-plugin.git) (67k)
 * [kojo](http://code.google.com/p/kojo/source/checkout) (15k)
 * [gizzard](https://github.com/twitter/gizzard) (5k)
 * [flockdb](https://github.com/twitter/flockdb) (4k)
 
-## cannot include: will not compile with >= 2.8.0 ##
+## cannot include: require < 2.8.0 ##
 * [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (15k)
 * [swap-scala](http://code.google.com/p/swap-scala/source/checkout) (5k)
 * [configgy](https://github.com/robey/configgy) (4k)
