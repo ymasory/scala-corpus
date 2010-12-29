@@ -8,12 +8,10 @@ import org.ensime.util._
 import scala.actors._
 import scala.actors.Actor._
 import scala.tools.nsc.{ Settings }
-import scala.tools.refactoring.common.Change
-import scala.collection.mutable.{ LinkedHashMap }
 
-case class SendBackgroundMessageEvent(code: Int, detail: Option[String])
+case class SendBackgroundMessageEvent(msg: String)
 case class RPCResultEvent(value: WireFormat, callId: Int)
-case class RPCErrorEvent(code: Int, detail: Option[String], callId: Int)
+case class RPCErrorEvent(value: String, callId: Int)
 case class RPCRequestEvent(req: Any, callId: Int)
 
 case class TypeCheckResultEvent(notes: NoteList)
@@ -25,7 +23,6 @@ case class ReloadAllReq()
 case class RemoveFileReq(file: File)
 case class ScopeCompletionReq(file: File, point: Int, prefix: String, constructor: Boolean)
 case class TypeCompletionReq(file: File, point: Int, prefix: String)
-case class ImportSuggestionsReq(file: File, point: Int, names:List[String])
 case class PackageMemberCompletionReq(path: String, prefix: String)
 case class SymbolAtPointReq(file: File, point: Int)
 case class InspectTypeReq(file: File, point: Int)
@@ -37,10 +34,6 @@ case class TypeByNameAtPointReq(name: String, file: File, point: Int)
 case class CallCompletionReq(id: Int)
 case class TypeAtPointReq(file: File, point: Int)
 
-case class AddUndo(summary: String, changes: List[Change])
-case class Undo(id: Int, summary: String, changes: Iterable[Change])
-case class UndoResult(id: Int, touched: Iterable[File])
-
 class Project(val protocol: Protocol) extends Actor with RPCTarget {
 
   protocol.setRPCTarget(this)
@@ -50,16 +43,13 @@ class Project(val protocol: Protocol) extends Actor with RPCTarget {
   protected var config: ProjectConfig = ProjectConfig.nullConfig
   protected var debugInfo: Option[ProjectDebugInfo] = None
 
-  private var undoCounter = 0
-  private val undos: LinkedHashMap[Int, Undo] = new LinkedHashMap[Int, Undo]
-
   def act() {
     println("Project waiting for init...")
     loop {
       try {
         receive {
-          case SendBackgroundMessageEvent(code: Int, detail: Option[String]) => {
-            protocol.sendBackgroundMessage(code, detail)
+          case SendBackgroundMessageEvent(msg: String) => {
+            protocol.sendBackgroundMessage(msg)
           }
           case IncomingMessageEvent(msg: WireFormat) => {
             protocol.handleIncomingMessage(msg)
@@ -70,14 +60,11 @@ class Project(val protocol: Protocol) extends Actor with RPCTarget {
           case result: TypeCheckResultEvent => {
             protocol.sendTypeCheckResult(result.notes)
           }
-          case AddUndo(sum, changes) => {
-            addUndo(sum, changes)
-          }
           case RPCResultEvent(value, callId) => {
             protocol.sendRPCReturn(value, callId)
           }
-          case RPCErrorEvent(code, detail, callId) => {
-            protocol.sendRPCError(code, detail, callId)
+          case RPCErrorEvent(msg, callId) => {
+            protocol.sendRPCError(msg, callId)
           }
         }
       } catch {
@@ -88,37 +75,10 @@ class Project(val protocol: Protocol) extends Actor with RPCTarget {
     }
   }
 
-  protected def addUndo(sum: String, changes: Iterable[Change]) {
-    undoCounter += 1
-    undos(undoCounter) = Undo(undoCounter, sum, changes)
-  }
-
-  protected def peekUndo(): Either[String, Undo] = {
-    undos.lastOption match {
-      case Some(u) => Right(u._2)
-      case _ => Left("No such undo.")
-    }
-  }
-
-  protected def execUndo(undoId: Int): Either[String, UndoResult] = {
-    undos.get(undoId) match {
-      case Some(u) => {
-        undos.remove(u.id)
-        FileUtils.writeChanges(u.changes) match {
-          case Right(touched) => Right(UndoResult(undoId, touched))
-          case Left(e) => Left(e.getMessage())
-        }
-      }
-      case _ => Left("No such undo.")
-    }
-  }
-
   protected def initProject(conf: ProjectConfig) {
-    this.config = conf
+    this.config = conf;
     restartCompiler
     shutdownBuilder
-    undos.clear
-    undoCounter = 0
   }
 
   protected def restartCompiler() {

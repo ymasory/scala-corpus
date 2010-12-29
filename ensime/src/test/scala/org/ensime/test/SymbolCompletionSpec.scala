@@ -54,6 +54,7 @@ class SymbolCompletionSpec extends Spec with ShouldMatchers{
 	    "}"
 	  ))
 	val syms = cc.askCompleteSymbolAt(src.position(4,1), "du", false)
+
 	expectFailure("I suspect the context does not extend to the closing brace.",
 	  "I work around this in Emacs by temporarily inserting '()'",
 	  "immediately after the completion point."){()=>
@@ -180,7 +181,12 @@ class SymbolCompletionSpec extends Spec with ShouldMatchers{
 	  ))
 	cc.askReloadAndTypeFiles(List(src1, src2))
 	val syms = cc.askCompleteSymbolAt(src2.position(4,1), "Ba", false)
-	syms.exists(s => s.name == "Bar") should be(true)
+	expectFailure("I see this a lot in day-to-day usage..",
+	  "Imported class symbols complete correctly when they're imported via wildcard (see prev test), ",
+	  "but not if they're imported explicitely."){()=>
+	  syms.exists(s => s.name == "Bar") should be(true)
+	}
+	
       }
     }
 

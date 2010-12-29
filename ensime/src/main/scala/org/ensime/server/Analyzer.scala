@@ -3,13 +3,11 @@ import java.io.File
 import org.ensime.config.ProjectConfig
 import org.ensime.model._
 import org.ensime.protocol.ProtocolConversions
-import org.ensime.protocol.ProtocolConst._
 import org.ensime.util._
 import org.ensime.util.RichFile._
 import scala.actors._
 import scala.actors.Actor._
 import scala.collection.{ Iterable }
-import scala.collection.mutable.{ ListBuffer }
 import scala.tools.nsc.{ Settings }
 import scala.tools.nsc.ast._
 import scala.tools.nsc.util.{ OffsetPosition }
@@ -23,29 +21,17 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
   private val settings = new Settings(Console.println)
   settings.processArguments(config.compilerArgs, false)
   settings.usejavacp.value = false
-
-  println("\nPresentation Compiler settings:")
-  println(settings.toString)
-  println("")
-
-  private val reporter = new PresentationReporter(new UserMessages {
-    override def showError(str: String) {
-      project ! SendBackgroundMessageEvent(
-        MsgCompilerUnexpectedError, Some(str))
-    }
-  })
-
+  private val reporter = new PresentationReporter()
   protected val scalaCompiler: RichCompilerControl = new RichPresentationCompiler(
     settings, reporter, this, config)
   protected val javaCompiler: JavaCompiler = new JavaCompiler(config)
   protected var awaitingInitialCompile = true
 
-  import protocol._
   import scalaCompiler._
+  import protocol._
 
   def act() {
-    project ! SendBackgroundMessageEvent(
-      MsgInitializingAnalyzer, Some("Initializing Analyzer. Please wait..."))
+    project ! SendBackgroundMessageEvent("Initializing Analyzer. Please wait...")
 
     println("Building Java sources...")
     javaCompiler.compileAll()
@@ -63,82 +49,51 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
             exit('stop)
           }
 
-          case FullTypeCheckCompleteEvent() => {
+          // Sent from presentation compiler runner
+          // thread, before it dies.
+          case CompilerFatalError(e: Throwable) => {
+            project ! SendBackgroundMessageEvent("Error analyzing Scala: " + e + ".")
+          }
 
-            // Block requests while compiler is booting
+          case FullTypeCheckCompleteEvent() => {
             if (awaitingInitialCompile) {
               project ! AnalyzerReadyEvent()
               awaitingInitialCompile = false
             }
-
-            val notes = reporter.allNotes
-
-            pendingTypeCheckRequest match {
-
-              // If this compilation was explicitely requested by client...
-              case Some((handler, failHandler)) => {
-                handler(notes)
-                pendingTypeCheckRequest = None
-              }
-
-              // Otherwise, use an out-of-band event to notify client
-              case None => {
-                val result = NoteList(true, notes)
-                project ! TypeCheckResultEvent(result)
-              }
-            }
-
+            val result = NoteList('scala, true, reporter.allNotes)
+            project ! TypeCheckResultEvent(result)
           }
 
-          case rpcReq@RPCRequestEvent(req: Any, callId: Int) => {
+          case RPCRequestEvent(req: Any, callId: Int) => {
             try {
               if (awaitingInitialCompile) {
-                project ! RPCErrorEvent(ErrAnalyzerNotReady,
-                  Some("Analyzer is not ready! Please wait."), callId)
+                project ! RPCErrorEvent(
+                  "Analyzer is not ready! Please wait.", callId)
               } else {
                 req match {
-
-                  case RemoveFileReq(file: File) => {
-		    askRemoveDeleted(file)
-                  }
-
                   case ReloadAllReq() => {
                     javaCompiler.reset()
                     javaCompiler.compileAll()
-                    val javaNotes = javaCompiler.allNotes
-                    waitForScalaTypeCheckResult({ notes =>
-                      val nl = NoteList(true, notes ++ javaNotes)
-                      project ! RPCResultEvent(toWF(nl), callId)
-                    }, { () =>
-                      project ! RPCResultEvent(toWF(null), callId)
-                    })
-                    scalaCompiler.askRemoveAllDeleted()
+                    val notes = javaCompiler.allNotes
+                    project ! TypeCheckResultEvent(NoteList('java, true, notes))
+
                     scalaCompiler.askReloadAllFiles()
+                    project ! RPCResultEvent(toWF(true), callId)
                   }
 
                   case ReloadFileReq(file: File) => {
-                    val allNotes = new ListBuffer[Note]
-
-                    if (!file.exists()) {
-                      project ! RPCErrorEvent(ErrFileDoesNotExist,
-                        Some(file.getPath()), callId)
-                    }
 
                     if (file.getAbsolutePath().endsWith(".java")) {
                       javaCompiler.compileFile(file)
-                      allNotes ++= javaCompiler.allNotes
+                      val notes = javaCompiler.allNotes
+                      project ! TypeCheckResultEvent(NoteList('java, false, notes))
                     }
-
-                    waitForScalaTypeCheckResult({ notes =>
-                      allNotes ++= notes
-                      val nl = NoteList(true, allNotes)
-                      project ! RPCResultEvent(toWF(nl), callId)
-                    }, { () =>
-                      project ! RPCResultEvent(toWF(null), callId)
-                    })
 
                     val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
                     scalaCompiler.askReloadFile(f)
+                    val result = NoteList('scala, false, reporter.allNotes)
+                    project ! TypeCheckResultEvent(result)
+                    project ! RPCResultEvent(toWF(true), callId)
                   }
 
                   case req: RefactorPerformReq => {
@@ -153,23 +108,24 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
                     handleRefactorCancel(req, callId)
                   }
 
+                  case RemoveFileReq(file: File) => {
+                    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
+                    scalaCompiler.removeUnitOf(f)
+                  }
+
                   case ScopeCompletionReq(file: File, point: Int,
                     prefix: String, constructor: Boolean) => {
-                    val p = pos(file, point)
+                    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
+                    val p = new OffsetPosition(f, point)
                     val syms = scalaCompiler.askCompleteSymbolAt(p, prefix, constructor)
                     project ! RPCResultEvent(toWF(syms.map(toWF)), callId)
                   }
 
                   case TypeCompletionReq(file: File, point: Int, prefix: String) => {
-                    val p = pos(file, point)
+                    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
+                    val p = new OffsetPosition(f, point)
                     val members = scalaCompiler.askCompleteMemberAt(p, prefix)
                     project ! RPCResultEvent(toWF(members.map(toWF)), callId)
-                  }
-
-                  case ImportSuggestionsReq(file: File, point: Int, names: List[String]) => {
-                    val p = pos(file, point)
-                    val suggestions = scalaCompiler.askImportSuggestions(p, names)
-                    project ! RPCResultEvent(toWF(suggestions), callId)
                   }
 
                   case PackageMemberCompletionReq(path: String, prefix: String) => {
@@ -178,7 +134,8 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
                   }
 
                   case InspectTypeReq(file: File, point: Int) => {
-                    val p = pos(file, point)
+                    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
+                    val p = new OffsetPosition(f, point)
                     val result = scalaCompiler.askInspectTypeAt(p) match {
                       case Some(info) => toWF(info)
                       case None => toWF(null)
@@ -195,7 +152,8 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
                   }
 
                   case SymbolAtPointReq(file: File, point: Int) => {
-                    val p = pos(file, point)
+                    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
+                    val p = new OffsetPosition(f, point)
                     val result = scalaCompiler.askSymbolInfoAt(p) match {
                       case Some(info) => toWF(info)
                       case None => toWF(null)
@@ -212,7 +170,8 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
                   }
 
                   case TypeAtPointReq(file: File, point: Int) => {
-                    val p = pos(file, point)
+                    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
+                    val p = new OffsetPosition(f, point)
                     val result = scalaCompiler.askTypeInfoAt(p) match {
                       case Some(info) => toWF(info)
                       case None => toWF(null)
@@ -237,7 +196,8 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
                   }
 
                   case TypeByNameAtPointReq(name: String, file: File, point: Int) => {
-                    val p = pos(file, point)
+                    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
+                    val p = new OffsetPosition(f, point)
                     val result = scalaCompiler.askTypeInfoByNameAt(name, p) match {
                       case Some(info) => toWF(info)
                       case None => toWF(null)
@@ -258,8 +218,7 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
               case e: Exception => {
                 System.err.println("Error handling RPC: " + e + " :\n" +
                   e.getStackTraceString)
-                project ! RPCErrorEvent(ErrExceptionInAnalyzer,
-                  Some("Error occurred in Analyzer. Check the server log."), callId)
+                project ! RPCErrorEvent("Error occurred in Analyzer. Check the server log.", callId)
               }
             }
           }
@@ -274,23 +233,6 @@ class Analyzer(val project: Project, val protocol: ProtocolConversions, val conf
         }
       }
     }
-  }
-
-  type TypeCheckHandler = (Iterable[Note] => Unit)
-  type TypeCheckFailureHandler = (() => Unit)
-
-  private var pendingTypeCheckRequest: Option[(TypeCheckHandler, TypeCheckFailureHandler)] = None
-
-  private def waitForScalaTypeCheckResult(handler: TypeCheckHandler, failHandler: TypeCheckFailureHandler) {
-    for ((handler, failHandler) <- pendingTypeCheckRequest) {
-      failHandler()
-    }
-    pendingTypeCheckRequest = Some((handler, failHandler))
-  }
-
-  def pos(file: File, offset: Int) = {
-    val f = scalaCompiler.sourceFileForPath(file.getAbsolutePath())
-    new OffsetPosition(f, offset)
   }
 
   override def finalize() {

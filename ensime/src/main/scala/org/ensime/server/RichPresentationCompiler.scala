@@ -3,14 +3,12 @@ import org.ensime.config.ProjectConfig
 import org.ensime.model._
 import scala.actors._
 import scala.actors.Actor._
-import scala.collection.mutable
+import scala.collection.mutable.{ LinkedHashMap, ListBuffer, LinkedHashSet }
 import scala.tools.nsc.{ Settings, FatalError }
 import scala.tools.nsc.interactive.{ Global, CompilerControl }
 import scala.tools.nsc.reporters.{ Reporter }
 import scala.tools.nsc.symtab.{ Flags, Types }
 import scala.tools.nsc.util.{ SourceFile, Position }
-import scala.tools.nsc.io.AbstractFile
-import scala.tools.refactoring.analysis.GlobalIndexes
 import java.io.File
 
 trait RichCompilerControl extends CompilerControl with RefactoringInterface { self: RichPresentationCompiler =>
@@ -66,13 +64,8 @@ trait RichCompilerControl extends CompilerControl with RefactoringInterface { se
     x.get
   }
 
-  def askRemoveAllDeleted() = askOr(removeAllDeleted(), t => ())
-
-  def askRemoveDeleted(f: File) = askOr(removeDeleted(AbstractFile.getFile(f)), t => ())
-
   def askReloadAllFiles() = {
-    val all = ((config.sourceFilenames.map(getSourceFile(_))) ++
-      firsts).toSet.toList
+    val all = ((config.sourceFilenames.map(getSourceFile(_))) ++ firsts).toSet.toList
     askReloadFiles(all)
   }
 
@@ -105,10 +98,6 @@ trait RichCompilerControl extends CompilerControl with RefactoringInterface { se
     reloadAndTypeFiles(files)
   }, t => ())
 
-  def askImportSuggestions(p: Position, names: Iterable[String]): ImportSuggestions = askOr({
-    ImportSuggestions(symbolSuggestions(names))
-  }, t => ImportSuggestions(List()))
-
   def askClearTypeCache() = clearTypeCache
 
   def sourceFileForPath(path: String) = getSourceFile(path)
@@ -124,41 +113,8 @@ class RichPresentationCompiler(
 
   import Helpers._
 
-  private val symsByFile = new mutable.HashMap[AbstractFile, mutable.LinkedHashSet[Symbol]] {
-    override def default(k: AbstractFile) = {
-      val v = new mutable.LinkedHashSet[Symbol]
-      put(k, v)
-      v
-    }
-  }
-
-  /** Called from typechecker every time a top-level class or object is entered.*/
-  override def registerTopLevelSym(sym: Symbol) {
-    super.registerTopLevelSym(sym)
-    symsByFile(sym.sourceFile) += sym
-  }
-
-  /** Remove symbols defined by files that no longer exist. */
-  def removeAllDeleted() {
-    firsts = firsts.filter { _.file.exists }
-    val deleted = symsByFile.keys.filter { !_.exists }
-    for (f <- deleted) {
-      removeDeleted(f)
-    }
-  }
-
-  /** Remove symbols defined by file that no longer exist. */
-  def removeDeleted(f: AbstractFile) {
-    val syms = symsByFile(f)
-    for (s <- syms) {
-      s.owner.info.decls unlink s
-    }
-    symsByFile.remove(f)
-    unitOfFile.remove(f)
-  }
-
   private def typePublicMembers(tpe: Type): Iterable[TypeMember] = {
-    val members = new mutable.LinkedHashMap[Symbol, TypeMember]
+    val members = new LinkedHashMap[Symbol, TypeMember]
     def addTypeMember(sym: Symbol, pre: Type, inherited: Boolean, viaView: Symbol) {
       try {
         val m = new TypeMember(
@@ -189,11 +145,8 @@ class RichPresentationCompiler(
         if (isNoParamArrowType(tpe)) {
           typePublicMembers(typeOrArrowTypeResult(tpe))
         } else {
-          val members: Iterable[TypeMember] = try {
-
-            // TODO: We throw away the Stream here...
-            typeMembers(p).flatten
-
+          val members = try {
+            typeMembers(p)
           } catch {
             case e => {
               System.err.println("Error retrieving type members:")
@@ -203,7 +156,7 @@ class RichPresentationCompiler(
           }
           // Remove duplicates
           // Filter out synthetic things
-          val bySym = new mutable.LinkedHashMap[Symbol, TypeMember]
+          val bySym = new LinkedHashMap[Symbol, TypeMember]
           for (m <- (members ++ typePublicMembers(tpe))) {
             if (!m.sym.nameString.contains("$")) {
               bySym(m.sym) = m
@@ -223,7 +176,8 @@ class RichPresentationCompiler(
     new TypeInspectInfo(
       TypeInfo(tpe),
       companionTypeOf(tpe).map(cacheType),
-      prepareSortedInterfaceInfo(typePublicMembers(tpe.asInstanceOf[Type])))
+      prepareSortedInterfaceInfo(typePublicMembers(tpe.asInstanceOf[Type]))
+      )
   }
 
   protected def inspectTypeAt(p: Position): Option[TypeInspectInfo] = {
@@ -283,15 +237,15 @@ class RichPresentationCompiler(
     } catch {
       case e: FatalError =>
         {
-        println("typedTreeAt threw FatalError: " + e + ", falling back to typedTree... ")
-        typedTree(p.source, true)
-        locateTree(p)
-      }
+          println("typedTreeAt threw FatalError: " + e + ", falling back to typedTree... ")
+          typedTree(p.source, true)
+          locateTree(p)
+        }
     }
   }
 
   protected def typeAt(p: Position): Either[Type, Throwable] = {
-    val tree = persistentTypedTreeAt(p)
+    val tree = persistentTypedTreeAt(p) 
     typeOfTree(tree)
   }
 
@@ -341,7 +295,7 @@ class RichPresentationCompiler(
     }
   }
 
-  /**
+  /**C-c followed by {, }, <, >, : or ;
    * Override scopeMembers to fix issues with finding method params
    * and occasional exception in pre.memberType. Hopefully we can
    * get these changes into Scala.
@@ -350,7 +304,7 @@ class RichPresentationCompiler(
     persistentTypedTreeAt(pos) // to make sure context is entered
     locateContext(pos) match {
       case Some(context) => {
-        val locals = new mutable.LinkedHashMap[Symbol, ScopeMember]
+        val locals = new LinkedHashMap[Symbol, ScopeMember]
         def addSymbol(sym: Symbol, pre: Type, viaImport: Tree) = {
           val ns = sym.nameString
           val accessible = context.isAccessible(sym, pre, false)
@@ -366,9 +320,8 @@ class RichPresentationCompiler(
                 viaImport)
               locals(sym) = member
             } catch {
-              case e =>
-                System.err.println("Error: Omitting scope member "
-                  + sym + ": " + e)
+              case e => System.err.println("Error: Omitting scope member "
+                + sym + ": " + e)
             }
           }
         }
@@ -386,9 +339,7 @@ class RichPresentationCompiler(
         }
         for (imp <- context.imports) {
           val pre = imp.qual.tpe
-          val importedSyms = pre.members.flatMap(transformImport(
-            imp.tree.selectors, _))
-          for (sym <- importedSyms) {
+          for (sym <- imp.allImportedSymbols) {
             addSymbol(sym, pre, imp.qual)
           }
         }
@@ -397,19 +348,6 @@ class RichPresentationCompiler(
       }
       case _ => List()
     }
-  }
-
-  // TODO: 
-  // This hides the core implementation is Contexts.scala, which
-  // has been patched. Once this bug is fixed, we can get rid of 
-  // this workaround.
-  private def transformImport(selectors: List[ImportSelector], sym: Symbol): List[Symbol] = selectors match {
-    case List() => List()
-    case List(ImportSelector(nme.WILDCARD, _, _, _)) => List(sym)
-    case ImportSelector(from, _, to, _) :: _ if (from.toString == sym.name.toString) =>
-      if (to == nme.WILDCARD) List()
-      else { val sym1 = sym.cloneSymbol; sym1.name = to; List(sym1) }
-    case _ :: rest => transformImport(rest, sym)
   }
 
   protected def completePackageMember(path: String, prefix: String): Iterable[PackageMemberInfoLight] = {
@@ -431,7 +369,7 @@ class RichPresentationCompiler(
 
   protected def completeSymbolAt(p: Position, prefix: String, constructor: Boolean): List[SymbolInfoLight] = {
     val names = scopeMembers(p, prefix, false)
-    val result = new mutable.LinkedHashSet[SymbolInfoLight]
+    val result = new LinkedHashSet[SymbolInfoLight]
     names.foreach { m =>
       m match {
         case ScopeMember(sym, tpe, true, _) => {
@@ -464,24 +402,6 @@ class RichPresentationCompiler(
       case _ => List()
     }.toList.sortWith((a, b) => a.name.length <= b.name.length)
     visibleMembers
-  }
-
-  protected def symbolSuggestions(names: Iterable[String]): Iterable[Iterable[SymbolInfo]] = {
-    val gi = new GlobalIndexes {
-      val global = RichPresentationCompiler.this
-      val cuIndexes = this.global.unitOfFile.values.map { u =>
-        CompilationUnitIndex(u.body)
-      }
-      val index = GlobalIndex(cuIndexes.toList)
-      val result = names.map { n =>
-        index.allDeclarations.keys.flatMap { d =>
-          if (d.nameString.contains(n)) Some(
-            SymbolInfo(d.asInstanceOf[RichPresentationCompiler.this.Symbol]))
-          else None
-        }
-      }
-    }
-    gi.result
   }
 
   /**

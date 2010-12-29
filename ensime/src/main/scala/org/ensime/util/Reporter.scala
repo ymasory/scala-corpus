@@ -7,12 +7,7 @@ import scala.tools.nsc.symtab.{ Symbols, Types }
 import scala.tools.nsc.util.{ NoPosition, SourceFile, Position, OffsetPosition }
 import org.eclipse.jdt.core.compiler.IProblem
 
-trait UserMessages{
-  def showError(str:String):Unit
-}
-
-
-class PresentationReporter(msgs:UserMessages) extends Reporter {
+class PresentationReporter extends Reporter {
 
   private val notes = new HashMap[SourceFile, HashSet[Note]] with SynchronizedMap[SourceFile, HashSet[Note]] {
     override def default(k: SourceFile) = { val v = new HashSet[Note]; put(k, v); v }
@@ -28,9 +23,6 @@ class PresentationReporter(msgs:UserMessages) extends Reporter {
   }
 
   override def info(pos: Position, msg: String, force: Boolean) {
-    if(msg.contains("MissingRequirementError: object scala not found")){
-      msgs.showError("Fatal Error: Scala language library not found on classpath. You may need to run 'sbt update', or 'mvn update'.")
-    }
     println("INFO: " + msg)
   }
 

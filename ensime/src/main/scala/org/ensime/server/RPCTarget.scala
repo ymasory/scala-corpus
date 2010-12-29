@@ -3,13 +3,10 @@ import java.io.File
 import org.ensime.config.ProjectConfig
 import org.ensime.debug.ProjectDebugInfo
 import org.ensime.model._
-import org.ensime.protocol.ProtocolConst._
 import org.ensime.util._
 import scala.actors._
 import scala.actors.Actor._
 import scala.collection.immutable
-import scala.tools.nsc.io.AbstractFile
-import scala.tools.refactoring.common.Change
 import scalariform.formatter.ScalaFormatter
 import scalariform.parser.ScalaParserException
 
@@ -19,21 +16,7 @@ trait RPCTarget { self: Project =>
 
   def rpcInitProject(conf: ProjectConfig, callId: Int) {
     initProject(conf)
-    sendRPCReturn(toWF(conf), callId)
-  }
-
-  def rpcPeekUndo(callId: Int) {
-    peekUndo match {
-      case Right(result) => sendRPCReturn(toWF(result), callId)
-      case Left(msg) => sendRPCError(ErrPeekUndoFailed, Some(msg), callId)
-    }
-  }
-
-  def rpcExecUndo(undoId: Int, callId: Int) {
-    execUndo(undoId) match {
-      case Right(result) => sendRPCReturn(toWF(result), callId)
-      case Left(msg) => sendRPCError(ErrExecUndoFailed, Some(msg), callId)
-    }
+    protocol.sendRPCAckOK(callId)
   }
 
   def rpcReplConfig(callId: Int) {
@@ -95,12 +78,6 @@ trait RPCTarget { self: Project =>
     analyzer ! RPCRequestEvent(ReloadFileReq(file), callId)
   }
 
-  def rpcRemoveFile(f: String, callId: Int) {
-    val file: File = new File(f)
-    analyzer ! RPCRequestEvent(RemoveFileReq(file), callId)
-    sendRPCAckOK(callId)
-  }
-
   def rpcTypecheckAll(callId: Int) {
     analyzer ! RPCRequestEvent(ReloadAllReq(), callId)
   }
@@ -113,7 +90,7 @@ trait RPCTarget { self: Project =>
     analyzer ! RPCRequestEvent(TypeCompletionReq(new File(f), point, prefix), callId)
   }
 
-  def rpcPackageMemberCompletion(path: String, prefix: String, callId: Int) {
+  def rpcPackageMemberCompletion(path:String, prefix: String, callId: Int) {
     analyzer ! RPCRequestEvent(PackageMemberCompletionReq(path, prefix), callId)
   }
 
@@ -124,6 +101,7 @@ trait RPCTarget { self: Project =>
   def rpcInspectTypeById(id: Int, callId: Int) {
     analyzer ! RPCRequestEvent(InspectTypeByIdReq(id), callId)
   }
+
 
   def rpcSymbolAtPoint(f: String, point: Int, callId: Int) {
     analyzer ! RPCRequestEvent(SymbolAtPointReq(new File(f), point), callId)
@@ -137,16 +115,12 @@ trait RPCTarget { self: Project =>
     analyzer ! RPCRequestEvent(TypeByNameReq(name), callId)
   }
 
-  def rpcTypeByNameAtPoint(name: String, f: String, point: Int, callId: Int) {
+  def rpcTypeByNameAtPoint(name: String, f:String, point:Int, callId: Int) {
     analyzer ! RPCRequestEvent(TypeByNameAtPointReq(name, new File(f), point), callId)
   }
 
   def rpcCallCompletion(id: Int, callId: Int) {
     analyzer ! RPCRequestEvent(CallCompletionReq(id), callId)
-  }
-
-  def rpcImportSuggestions(f: String, point: Int, names: List[String], callId: Int) {
-    analyzer ! RPCRequestEvent(ImportSuggestionsReq(new File(f), point, names), callId)
   }
 
   def rpcTypeAtPoint(f: String, point: Int, callId: Int) {
@@ -172,27 +146,23 @@ trait RPCTarget { self: Project =>
   def rpcFormatFiles(filenames: Iterable[String], callId: Int) {
     val files = filenames.map { new File(_) }
     try {
-      val changeList = files.map { f =>
+      val rewriteList = files.map { f =>
         FileUtils.readFile(f) match {
           case Right(contents) => {
             val formatted = ScalaFormatter.format(contents, config.formattingPrefs)
-            Change(AbstractFile.getFile(f), 0, contents.length, formatted)
+            (f, formatted)
           }
           case Left(e) => throw e
         }
       }
-      addUndo("Formatted source of " + filenames.mkString(", ") + ".", 
-	FileUtils.inverseChanges(changeList))
-      FileUtils.writeChanges(changeList) match {
-        case Right(_) => sendRPCAckOK(callId)
-        case Left(e) =>
-        sendRPCError(ErrFormatFailed, 
-	  Some("Could not write any formatting changes: " + e), callId)
+      FileUtils.rewriteFiles(rewriteList) match {
+        case Right(Right(())) => sendRPCAckOK(callId)
+        case Right(Left(e)) =>
+          sendRPCError("ATTENTION! Possibly incomplete write of change-set caused by: " + e, callId)
+        case Left(e) => sendRPCError("Could not write any formatting changes: " + e, callId)
       }
     } catch {
-      case e: ScalaParserException =>
-      sendRPCError(ErrFormatFailed, 
-	Some("Cannot format broken syntax: " + e), callId)
+      case e: ScalaParserException => sendRPCError("Cannot format broken syntax: " + e, callId)
     }
 
   }

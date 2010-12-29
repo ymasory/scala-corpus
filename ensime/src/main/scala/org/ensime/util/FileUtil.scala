@@ -5,7 +5,6 @@ import java.nio.channels.FileChannel
 import java.nio.charset.Charset
 import scala.collection.Seq
 import scala.collection.mutable
-import scala.tools.refactoring.common.Change
 
 // This routine stolen from http://rosettacode.org/wiki/Walk_a_directory/Recursively#Scala
 
@@ -121,55 +120,6 @@ object FileUtils {
       }
       finally {
         writer.close()
-      }
-    } catch {
-      case e: Exception => Left(e)
-    }
-  }
-
-  // Note: we assume changes do not overlap
-  def inverseChanges(changes: Iterable[Change]): List[Change] = {
-    val result = new mutable.ListBuffer[Change]
-    val changesByFile = changes.groupBy(_.file.file)
-    val rewriteList = changesByFile.map {
-      case (file, changes) => {
-        readFile(file) match {
-          case Right(contents) => {
-            var dy = 0
-            for (ch <- changes) {
-              val original = contents.substring(ch.from, ch.to)
-              val from = ch.from + dy
-              val to = from + ch.text.length
-              result += Change(ch.file, from, to, original)
-              dy += ch.text.length - original.length
-            }
-          }
-          case Left(e) =>
-        }
-      }
-    }
-    result.toList
-  }
-
-  def writeChanges(changes: Iterable[Change]): Either[Exception, Iterable[File]] = {
-    val changesByFile = changes.groupBy(_.file.file)
-    try {
-      val rewriteList = changesByFile.map {
-        case (file, changes) => {
-          readFile(file) match {
-            case Right(contents) => {
-              val changed = Change.applyChanges(changes.toList, contents)
-              (file, changed)
-            }
-            case Left(e) => throw e
-          }
-        }
-      }
-      rewriteFiles(rewriteList) match {
-        case Right(Right(())) => Right(changesByFile.keys)
-        case Right(Left(e)) => Left(new IllegalStateException(
-          "Possibly incomplete write of change-set caused by: " + e))
-        case Left(e) => Left(e)
       }
     } catch {
       case e: Exception => Left(e)

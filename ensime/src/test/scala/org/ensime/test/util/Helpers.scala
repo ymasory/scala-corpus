@@ -1,6 +1,6 @@
 package org.ensime.test.util
 
-import scala.actors.Actor._
+import scala.actors.Actor._  
 import scala.tools.nsc.interactive.{Global, CompilerControl}
 import scala.tools.nsc.{Settings, FatalError}
 import scala.tools.nsc.reporters.{StoreReporter}
@@ -18,7 +18,7 @@ object Helpers{
 
     //TODO: Don't hardcode this path!
     settings.processArguments(List(
-	"-classpath","project/boot/scala-2.8.1.RC3/lib/scala-library.jar",
+	"-classpath","project/boot/scala-2.8.0/lib/scala-library.jar",
 	"-verbose"
       ), false)
     settings.usejavacp.value = false

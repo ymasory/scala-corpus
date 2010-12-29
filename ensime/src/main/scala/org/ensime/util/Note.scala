@@ -7,7 +7,7 @@ import scala.tools.nsc.symtab.{ Symbols, Types }
 import scala.tools.nsc.util.{ NoPosition, SourceFile, Position, OffsetPosition }
 import org.eclipse.jdt.core.compiler.IProblem
 
-case class NoteList(full: Boolean, notes: Iterable[Note])
+case class NoteList(lang: scala.Symbol, full: Boolean, notes: Iterable[Note])
 
 object Note {
 

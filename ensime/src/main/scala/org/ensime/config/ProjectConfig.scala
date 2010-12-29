@@ -9,13 +9,14 @@ import scala.actors.Actor._
 import scala.collection.mutable
 import scalariform.formatter.preferences._
 
+
 object ProjectConfig {
 
   /**
-  * Create a ProjectConfig instance from the given
-  * SExp property list.
-  */
-  def fromSExp(config: SExpList) = {
+   * Create a ProjectConfig instance from the given
+   * SExp property list.
+   */
+  def apply(config: SExpList) = {
     import ExternalConfigInterface._
 
     val m = config.toKeywordMap
@@ -32,20 +33,15 @@ object ProjectConfig {
     val compileDeps = new mutable.HashSet[CanonFile]
     val classDirs = new mutable.HashSet[CanonFile]
     var target: Option[CanonFile] = None
-    var projectName: Option[String] = None
 
     m.get(key(":use-sbt")) match {
       case Some(TruthAtom()) => {
-	val depDirs = m.get(key(":sbt-subproject-dependencies")) match {
-	  case Some(SExpList(deps)) => deps.map(_.toString)
-	  case _ => List[String]()
-	}
         println("Using sbt configuration..")
-        val ext = getSbtConfig(rootDir, depDirs)
-        projectName = ext.projectName
+        val ext = getSbtConfig(rootDir)
         sourceRoots ++= ext.sourceRoots
         runtimeDeps ++= ext.runtimeDepJars
         compileDeps ++= ext.compileDepJars
+        compileDeps ++= ext.testDepJars
         target = ext.target
       }
       case _ =>
@@ -55,10 +51,10 @@ object ProjectConfig {
       case Some(TruthAtom()) => {
         println("Using maven configuration..")
         val ext = getMavenConfig(rootDir)
-        projectName = ext.projectName
         sourceRoots ++= ext.sourceRoots
         runtimeDeps ++= ext.runtimeDepJars
         compileDeps ++= ext.compileDepJars
+        compileDeps ++= ext.testDepJars
         target = ext.target
       }
       case _ =>
@@ -146,8 +142,6 @@ object ProjectConfig {
       case _ =>
     }
 
-    projectName = projectName.orElse(m.get(key(":project-name")).map(_.toString))
-
     val formatPrefs: Map[Symbol, Any] = m.get(key(":formatting-prefs")) match {
       case Some(list: SExpList) => {
         list.toKeywordMap.map {
@@ -157,13 +151,6 @@ object ProjectConfig {
       case _ => Map[Symbol, Any]()
     }
     println("Using formatting preferences: " + formatPrefs)
-
-
-    // Provide fix for 2.8.0 backwards compatibility
-    val implicitNotFoundJar = new File("lib/implicitNotFound.jar")
-    assert (implicitNotFoundJar.exists, { System.err.println(
-	  "lib/implicitNotFound.jar not found! 2.8.0 compatibility may be broken.") })
-    compileDeps += implicitNotFoundJar
 
     // Provide some reasonable defaults..
 
@@ -179,7 +166,6 @@ object ProjectConfig {
     }
 
     new ProjectConfig(
-      projectName,
       rootDir, sourceRoots, runtimeDeps,
       compileDeps, classDirs, target,
       formatPrefs)
@@ -207,7 +193,7 @@ object ProjectConfig {
     }
   }
 
-  def nullConfig = new ProjectConfig(None, new File("."), List(),
+  def nullConfig = new ProjectConfig(new File("."), List(),
     List(), List(), List(), None, Map())
 
   def getJavaHome(): Option[File] = {
@@ -242,7 +228,6 @@ class ReplConfig(val classpath: String) {}
 class DebugConfig(val classpath: String, val sourcepath: String) {}
 
 class ProjectConfig(
-  val name: Option[String],
   val root: CanonFile,
   val sourceRoots: Iterable[CanonFile],
   val runtimeDeps: Iterable[CanonFile],
@@ -252,32 +237,30 @@ class ProjectConfig(
   formattingPrefsMap: Map[Symbol, Any]) {
 
   val formattingPrefs = formattingPrefsMap.
-  foldLeft(FormattingPreferences()) { (fp, p) =>
-    p match {
-      case ('alignParameters, value: Boolean) =>
-      fp.setPreference(AlignParameters, value)
-      case ('compactStringConcatenation, value: Boolean) =>
-      fp.setPreference(CompactStringConcatenation, value)
-      case ('doubleIndentClassDeclaration, value: Boolean) =>
-      fp.setPreference(DoubleIndentClassDeclaration, value)
-      case ('formatXml, value: Boolean) =>
-      fp.setPreference(FormatXml, value)
-      case ('indentPackageBlocks, value: Boolean) =>
-      fp.setPreference(IndentPackageBlocks, value)
-      case ('indentSpaces, value: Int) =>
-      fp.setPreference(IndentSpaces, value)
-      case ('preserveSpaceBeforeArguments, value: Boolean) =>
-      fp.setPreference(PreserveSpaceBeforeArguments, value)
-      case ('rewriteArrowSymbols, value: Boolean) =>
-      fp.setPreference(RewriteArrowSymbols, value)
-      case ('spaceBeforeColon, value: Boolean) =>
-      fp.setPreference(SpaceBeforeColon, value)
-      case (name, _) => {
-        System.err.println("Oops, unrecognized formatting option: " + name)
-        fp
+    foldLeft(FormattingPreferences()) { (fp, p) =>
+      p match {
+        case ('alignParameters, value: Boolean) =>
+          fp.setPreference(AlignParameters, value)
+        case ('compactStringConcatenation, value: Boolean) =>
+          fp.setPreference(CompactStringConcatenation, value)
+        case ('doubleIndentClassDeclaration, value: Boolean) =>
+          fp.setPreference(DoubleIndentClassDeclaration, value)
+        case ('formatXml, value: Boolean) =>
+          fp.setPreference(FormatXml, value)
+        case ('indentSpaces, value: Int) =>
+          fp.setPreference(IndentSpaces, value)
+        case ('preserveSpaceBeforeArguments, value: Boolean) =>
+          fp.setPreference(PreserveSpaceBeforeArguments, value)
+        case ('rewriteArrowSymbols, value: Boolean) =>
+          fp.setPreference(RewriteArrowSymbols, value)
+        case ('spaceBeforeColon, value: Boolean) =>
+          fp.setPreference(SpaceBeforeColon, value)
+        case (name, _) => {
+          System.err.println("Oops, unrecognized formatting option: " + name)
+          fp
+        }
       }
     }
-  }
 
   def compilerClasspathFilenames: Set[String] = {
     (compileDeps ++ classDirs).map(_.getPath).toSet
@@ -293,40 +276,38 @@ class ProjectConfig(
 
   def compilerArgs = List(
     "-classpath", compilerClasspath,
-    "-verbose")
+    "-verbose",
+    sourceFilenames.mkString(" ")
+    )
 
   def builderArgs = List(
     "-classpath", compilerClasspath,
     "-verbose",
     "-d", target.getOrElse(new File(root, "classes")).getPath,
-    sourceFilenames.mkString(" "))
+    sourceFilenames.mkString(" ")
+    )
 
   def compilerClasspath: String = {
-    val files = compilerClasspathFilenames
-    if (files.isEmpty) {
-      "."
-    } else {
-      compilerClasspathFilenames.mkString(File.pathSeparator)
-    }
+    compilerClasspathFilenames.mkString(File.pathSeparator)
   }
 
   def runtimeClasspath: String = {
-    val deps = runtimeDeps ++ classDirs ++ target
-    val paths = deps.map(_.getPath).toSet
+    val allFiles = compileDeps ++ runtimeDeps ++ classDirs ++ target
+    val paths = allFiles.map(_.getPath).toSet
     paths.mkString(File.pathSeparator)
-  }
-
-  def sourcepath = {
-    sourceRoots.map(_.getPath).toSet.mkString(File.pathSeparator)
   }
 
   def replClasspath = runtimeClasspath
 
   def debugClasspath = runtimeClasspath
 
+  def debugSourcepath = {
+    sourceRoots.map(_.getPath).toSet.mkString(File.pathSeparator)
+  }
+
   def replConfig = new ReplConfig(replClasspath)
 
-  def debugConfig = new DebugConfig(debugClasspath, sourcepath)
+  def debugConfig = new DebugConfig(debugClasspath, debugSourcepath)
 
 }
 

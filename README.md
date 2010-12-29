@@ -16,6 +16,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
 * [casbah](https://github.com/mongodb/casbah) (4k)
+* [ensime](https://github.com/aemoncannon/ensime) (4k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
 * [smile](https://github.com/robey/smile) (3k)
 * [flashup](https://github.com/ymasory/Flashup) (1k)
@@ -45,9 +46,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 * [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
-
-## cannot include at the moment: require >= 2.8.1 ##
-* [ensime](https://github.com/aemoncannon/ensime) (5k)
 
 ## cannot include: require some dependencies pre-installed on build system ##
 * [scala-intellij](http://git.jetbrains.org/?p=idea/scala-plugin.git) (67k)

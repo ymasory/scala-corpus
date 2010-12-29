@@ -17,7 +17,6 @@ object SwankProtocol extends SwankProtocol {}
 trait SwankProtocol extends Protocol {
 
   import SwankProtocol._
-  import ProtocolConst._
 
   val PROTOCOL_VERSION: String = "0.0.1"
 
@@ -72,11 +71,11 @@ trait SwankProtocol extends Protocol {
     }
   }
 
-  def sendBackgroundMessage(code: Int, detail: Option[String]) {
+  def sendBackgroundMessage(msg: String) {
     sendMessage(SExp(
       key(":background-message"),
-      code,
-      detail.map(strToSExp).getOrElse(NilAtom())))
+      msg
+      ))
   }
 
   def handleIncomingMessage(msg: Any) {
@@ -92,7 +91,7 @@ trait SwankProtocol extends Protocol {
         handleEmacsRex(form, callId)
       }
       case _ => {
-        sendProtocolError(ErrUnrecognizedForm, Some(sexp.toReadableString))
+        sendProtocolError(sexp.toReadableString, "Unknown protocol form.")
       }
     }
   }
@@ -105,15 +104,15 @@ trait SwankProtocol extends Protocol {
         } catch {
           case e: Throwable =>
             {
-            e.printStackTrace(System.err)
-            sendRPCError(ErrExceptionInRPC, Some(e.getMessage), callId)
-          }
+              e.printStackTrace(System.err)
+              sendRPCError("Exception raised in RPC " + form + " : " +
+                e.getMessage, callId)
+            }
         }
       }
       case _ => {
         sendRPCError(
-          ErrMalformedRPC,
-          Some("Expecting leading symbol in: " + form),
+          "Malformed RPC call. Expecting leading symbol: " + form,
           callId)
       }
     }
@@ -123,7 +122,7 @@ trait SwankProtocol extends Protocol {
 
     println("\nHandling RPC: " + form)
 
-    def oops = sendRPCError(ErrMalformedRPC, Some("Malformed " + callType + " call: " + form), callId)
+    def oops = sendRPCError("Malformed " + callType + " call: " + form, callId)
 
     callType match {
       case "swank:connection-info" => {
@@ -131,20 +130,9 @@ trait SwankProtocol extends Protocol {
       }
       case "swank:init-project" => {
         form match {
-          case SExpList(head ::(conf: SExpList) :: body) => {
-            val config = ProjectConfig.fromSExp(conf)
-            rpcTarget.rpcInitProject(config, callId)
-          }
-          case _ => oops
-        }
-      }
-      case "swank:peek-undo" => {
-        rpcTarget.rpcPeekUndo(callId)
-      }
-      case "swank:exec-undo" => {
-        form match {
-          case SExpList(head ::(IntAtom(id)) :: body) => {
-            rpcTarget.rpcExecUndo(id, callId)
+          case SExpList(head ::(config: SExpList) :: body) => {
+            val conf = ProjectConfig(config)
+            rpcTarget.rpcInitProject(conf, callId)
           }
           case _ => oops
         }
@@ -208,14 +196,6 @@ trait SwankProtocol extends Protocol {
           case _ => oops
         }
       }
-      case "swank:remove-file" => {
-        form match {
-          case SExpList(head :: StringAtom(file) :: body) => {
-            rpcTarget.rpcRemoveFile(file, callId)
-          }
-          case _ => oops
-        }
-      }
       case "swank:typecheck-file" => {
         form match {
           case SExpList(head :: StringAtom(file) :: body) => {
@@ -239,15 +219,6 @@ trait SwankProtocol extends Protocol {
         form match {
           case SExpList(head :: StringAtom(file) :: IntAtom(point) :: StringAtom(prefix) :: body) => {
             rpcTarget.rpcTypeCompletion(file, point, prefix, callId)
-          }
-          case _ => oops
-        }
-      }
-      case "swank:import-suggestions" => {
-        form match {
-          case SExpList(head :: StringAtom(file) :: IntAtom(point) :: SExpList(names) :: body) => {
-            rpcTarget.rpcImportSuggestions(file, point,
-              names.map(_.toString).toList, callId)
           }
           case _ => oops
         }
@@ -373,8 +344,7 @@ trait SwankProtocol extends Protocol {
 
       case other => {
         sendRPCError(
-          ErrUnrecognizedRPC,
-          Some("Unknown :swank-rpc call: " + other),
+          "Unknown :swank-rpc call: " + other,
           callId)
       }
     }
@@ -395,30 +365,31 @@ trait SwankProtocol extends Protocol {
     value match {
       case sexp: SExp =>
         {
-        sendMessage(SExp(
-          key(":return"),
-          SExp(key(":ok"), sexp),
-          callId))
-      }
+          sendMessage(SExp(
+            key(":return"),
+            SExp(key(":ok"), sexp),
+            callId
+            ))
+        }
       case _ => throw new IllegalStateException("Not a SExp: " + value)
     }
   }
 
-  def sendRPCError(code: Int, detail: Option[String], callId: Int) {
+  def sendRPCError(value: String, callId: Int) {
     sendMessage(SExp(
       key(":return"),
-      SExp(key(":abort"),
-        code,
-        detail.map(strToSExp).getOrElse(NilAtom())),
-      callId))
+      SExp(key(":abort"), value),
+      callId
+      ))
   }
 
-  def sendProtocolError(code: Int, detail: Option[String]) {
+  def sendProtocolError(packet: String, condition: String) {
     sendMessage(
       SExp(
         key(":reader-error"),
-        code,
-        detail.map(strToSExp).getOrElse(NilAtom())))
+        packet,
+        condition
+        ))
   }
 
   /*
@@ -429,24 +400,37 @@ trait SwankProtocol extends Protocol {
       key(":pid"), 'nil,
       key(":server-implementation"),
       SExp(
-        key(":name"), SERVER_NAME),
+        key(":name"), SERVER_NAME
+        ),
       key(":machine"), 'nil,
       key(":features"), 'nil,
-      key(":version"), PROTOCOL_VERSION)
+      key(":version"), PROTOCOL_VERSION
+      )
     sendRPCReturn(info, callId)
   }
 
   def sendCompilerReady() = sendMessage(SExp(key(":compiler-ready"), true))
 
   def sendTypeCheckResult(notelist: NoteList) = {
-    sendMessage(SExp(key(":typecheck-result"), toWF(notelist)))
+    val NoteList(lang, isFull, notes) = notelist
+    sendMessage(SExp(
+      key(":typecheck-result"),
+      SExp(
+        key(":lang"), if (lang == 'scala) { key(":scala") } else { key(":java") },
+        key(":is-full"),
+        toWF(isFull),
+        key(":notes"),
+        SExpList(notes.map(toWF))
+        )
+      ))
   }
 
   object SExpConversion {
 
     implicit def posToSExp(pos: Position): SExp = {
       if (pos.isDefined) {
-        SExp.propList((":file", pos.source.path), (":offset", pos.point))
+        SExp.propList((":file", pos.source.path), (":offset", pos.point + 1) // <- Emacs point starts at 1
+          )
       } else {
         'nil
       }
@@ -456,28 +440,16 @@ trait SwankProtocol extends Protocol {
 
   import SExpConversion._
 
-  def toWF(config: ProjectConfig): SExp = {
-    SExp(
-      key(":project-name"), config.name.map(StringAtom).getOrElse('nil),
-      key(":source-roots"), SExp(config.sourceRoots.map { f => StringAtom(f.getPath) }))
-  }
-
   def toWF(config: ReplConfig): SExp = {
     SExp.propList((":classpath", strToSExp(config.classpath)))
   }
 
   def toWF(config: DebugConfig): SExp = {
-    SExp.propList(
-      (":classpath", strToSExp(config.classpath)),
-      (":sourcepath", strToSExp(config.sourcepath)))
+    SExp.propList((":classpath", strToSExp(config.classpath)), (":sourcepath", strToSExp(config.sourcepath)))
   }
 
   def toWF(unit: DebugUnit): SExp = {
-    SExp.propList(
-      (":full-name", strToSExp(unit.classQualName)),
-      (":package", strToSExp(unit.packageName)),
-      (":start-line", intToSExp(unit.startLine)),
-      (":end-line", intToSExp(unit.endLine)))
+    SExp.propList((":full-name", strToSExp(unit.classQualName)), (":package", strToSExp(unit.packageName)), (":start-line", intToSExp(unit.startLine)), (":end-line", intToSExp(unit.endLine)))
   }
 
   def toWF(value: Boolean): SExp = {
@@ -505,16 +477,8 @@ trait SwankProtocol extends Protocol {
       key(":end"), note.end,
       key(":line"), note.line,
       key(":col"), note.col,
-      key(":file"), note.file)
-  }
-
-  def toWF(notelist: NoteList): SExp = {
-    val NoteList(isFull, notes) = notelist
-    SExp(
-      key(":is-full"),
-      toWF(isFull),
-      key(":notes"),
-      SExpList(notes.map(toWF)))
+      key(":file"), note.file
+      )
   }
 
   def toWF(values: Iterable[WireFormat]): SExp = {
@@ -522,11 +486,8 @@ trait SwankProtocol extends Protocol {
   }
 
   def toWF(value: SymbolInfoLight): SExp = {
-    SExp.propList(
-      (":name", value.name),
-      (":type-sig", value.tpeSig),
-      (":type-id", value.tpeId),
-      (":is-callable", value.isCallable))
+    SExp.propList((":name", value.name), (":type-sig", value.tpeSig), (":type-id", value.tpeId), (":is-callable", value.isCallable)
+      )
   }
 
   def toWF(value: PackageMemberInfoLight): SExp = {
@@ -534,27 +495,17 @@ trait SwankProtocol extends Protocol {
   }
 
   def toWF(value: SymbolInfo): SExp = {
-    SExp.propList(
-      (":name", value.name),
-      (":type", toWF(value.tpe)),
-      (":decl-pos", value.declPos),
-      (":is-callable", value.isCallable))
+    SExp.propList((":name", value.name), (":type", toWF(value.tpe)), (":decl-pos", value.declPos), (":is-callable", value.isCallable)
+      )
   }
 
   def toWF(value: NamedTypeMemberInfoLight): SExp = {
-    SExp.propList(
-      (":name", value.name),
-      (":type-sig", value.tpeSig),
-      (":type-id", value.tpeId),
-      (":is-callable", value.isCallable))
+    SExp.propList((":name", value.name), (":type-sig", value.tpeSig), (":type-id", value.tpeId), (":is-callable", value.isCallable))
   }
 
   def toWF(value: NamedTypeMemberInfo): SExp = {
-    SExp.propList(
-      (":name", value.name),
-      (":type", toWF(value.tpe)),
-      (":pos", value.pos),
-      (":decl-as", value.declaredAs))
+    SExp.propList((":name", value.name), (":type", toWF(value.tpe)), (":pos", value.pos), (":decl-as", value.declaredAs)
+      )
   }
 
   def toWF(value: EntityInfo): SExp = {
@@ -571,111 +522,98 @@ trait SwankProtocol extends Protocol {
     value match {
       case value: ArrowTypeInfo =>
         {
-        SExp.propList(
-          (":name", value.name),
-          (":type-id", value.id),
-          (":arrow-type", true),
-          (":result-type", toWF(value.resultType)),
-          (":param-sections", SExp(value.paramSections.map(toWF))))
-      }
+          SExp.propList(
+	    (":name", value.name), 
+	    (":type-id", value.id), 
+	    (":arrow-type", true), 
+	    (":result-type", toWF(value.resultType)), 
+	    (":param-sections", SExp(value.paramSections.map{sect => SExp(sect.map{toWF(_)})}))
+            )
+        }
       case value: TypeInfo =>
         {
-        SExp.propList((":name", value.name),
-          (":type-id", value.id),
-          (":full-name", value.fullName),
-          (":decl-as", value.declaredAs),
-          (":type-args", SExp(value.args.map(toWF))),
-          (":members", SExp(value.members.map(toWF))),
-          (":pos", value.pos),
-          (":outer-type-id", value.outerTypeId.map(intToSExp).getOrElse('nil)))
-      }
+          SExp.propList((":name", value.name), 
+	    (":type-id", value.id), 
+	    (":full-name", value.fullName), 
+	    (":decl-as", value.declaredAs), 
+	    (":type-args", SExp(value.args.map(toWF))), 
+	    (":members", SExp(value.members.map(toWF))), 
+	    (":pos", value.pos), 
+	    (":outer-type-id", value.outerTypeId.map(intToSExp).getOrElse('nil))
+            )
+        }
       case value => throw new IllegalStateException("Unknown TypeInfo: " + value)
     }
   }
 
   def toWF(value: PackageInfo): SExp = {
-    SExp.propList((":name", value.name),
-      (":info-type", 'package),
-      (":full-name", value.fullname),
-      (":members", SExpList(value.members.map(toWF))))
+    SExp.propList(
+      (":name", value.name), 
+      (":info-type", 'package), 
+      (":full-name", value.fullname), 
+      (":members", SExpList(value.members.map(toWF)))
+      )
   }
 
   def toWF(value: CallCompletionInfo): SExp = {
     SExp.propList(
-      (":result-type", toWF(value.resultType)),
-      (":param-sections", SExp(value.paramSections.map(toWF))))
-  }
-
-  def toWF(value: ParamSectionInfo): SExp = {
-    SExp.propList(
-      (":params", SExp(value.params.map {
-        case (nm, tp) => SExp(nm, toWF(tp))
-      })),
-      (":is-implicit", value.isImplicit))
-
+      (":result-type", toWF(value.resultType)), 
+      (":param-sections", SExp(value.paramSections.map{ sect => SExp(sect.map{ pair => 
+	      SExp(toWF(pair._1), toWF(pair._2))
+	    })}))
+      )
   }
 
   def toWF(value: InterfaceInfo): SExp = {
     SExp.propList(
-      (":type", toWF(value.tpe)),
-      (":via-view", value.viaView.map(strToSExp).getOrElse('nil)))
+      (":type", toWF(value.tpe)), 
+      (":via-view", value.viaView.map(strToSExp).getOrElse('nil))
+      )
   }
 
   def toWF(value: TypeInspectInfo): SExp = {
     SExp.propList(
-      (":type", toWF(value.tpe)),
-      (":info-type", 'typeInspect),
+      (":type", toWF(value.tpe)), 
+      (":info-type", 'typeInspect), 
       (":companion-id", value.companionId match {
-        case Some(id) => id
-        case None => 'nil
-      }), (":interfaces", SExp(value.supers.map(toWF))))
+      case Some(id) => id
+      case None => 'nil
+    }), (":interfaces", SExp(value.supers.map(toWF)))
+      )
   }
 
   def toWF(value: RefactorFailure): SExp = {
     SExp.propList(
-      (":procedure-id", value.procedureId),
-      (":status", 'failure),
-      (":reason", value.message))
+      (":procedure-id", value.procedureId), 
+      (":status", 'failure), 
+      (":reason", value.message)
+      )
   }
 
   def toWF(value: RefactorEffect): SExp = {
     SExp.propList(
-      (":procedure-id", value.procedureId),
-      (":refactor-type", value.refactorType),
-      (":status", 'success),
-      (":changes", SExpList(value.changes.map(changeToWF))))
+      (":procedure-id", value.procedureId), 
+      (":refactor-type", value.refactorType), 
+      (":status", 'success), 
+      (":changes", SExpList(value.changes.map(changeToWF)))
+      )
   }
 
   def toWF(value: RefactorResult): SExp = {
     SExp.propList(
-      (":procedure-id", value.procedureId),
-      (":refactor-type", value.refactorType),
-      (":touched-files", SExpList(value.touched.map(f => strToSExp(f.getAbsolutePath)))))
-  }
-
-  def toWF(value: ImportSuggestions): SExp = {
-    SExpList(value.symLists.map { l => SExpList(l.map(toWF)) })
-  }
-
-  def toWF(value: Undo): SExp = {
-    SExp.propList(
-      (":id", value.id),
-      (":changes", SExpList(value.changes.map(changeToWF))),
-      (":summary", value.summary))
-  }
-
-  def toWF(value: UndoResult): SExp = {
-    SExp.propList(
-      (":id", value.id),
-      (":touched-files", SExpList(value.touched.map(f => strToSExp(f.getAbsolutePath)))))
+      (":procedure-id", value.procedureId), 
+      (":refactor-type", value.refactorType), 
+      (":touched-files", SExpList(value.touched.map(f => strToSExp(f.getAbsolutePath))))
+      )
   }
 
   private def changeToWF(ch: Change): SExp = {
     SExp.propList(
-      (":file", ch.file.path),
-      (":text", ch.text),
-      (":from", ch.from),
-      (":to", ch.to))
+      (":file", ch.file.path), 
+      (":text", ch.text), 
+      (":from", ch.from + 1), 
+      (":to", ch.to + 1)
+      )
   }
 
 }
