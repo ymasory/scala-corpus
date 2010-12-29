@@ -1,10 +1,7 @@
 import sbt._
-import Ignore._
+import Dummy._
 
 class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
-
-  override def tasks = super.tasks
-  override def methods = Map.empty
 
   lazy val akka = project("akka", "akka", new CorpusSubproject(_) { /* git 57d0e85a9adeb088fbe4b2cb7140647cdbc1c432 */
     lazy val akka_actor = project("akka-actor", "akka-actor", new CorpusSubproject(_))
@@ -37,6 +34,10 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
 }
 
 
-object Ignore {
-  class CorpusSubproject(info: ProjectInfo) extends DefaultProject(info)
+object Dummy { //just so sbt doesn't complain about multiple project definitions
+  class CorpusSubproject(info: ProjectInfo) extends DefaultProject(info) {
+    override def compileOptions =
+      super.compileOptions ++ Seq("-deprecation", "-unchecked").map(CompileOption(_))
+    override def javaCompileOptions = JavaCompileOption("-Xlint:unchecked") :: super.javaCompileOptions.toList
+  }
 }
