@@ -9,7 +9,7 @@ This collection is built using [sbt](http://code.google.com/p/simple-build-tool/
     sbt update
     sbt test-compile
 
-NOTE: Some systems may not be able to build every sub-project due to a [known bug](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac` concerning file name lengths.
+NOTE: Some systems (e.g., Linux with home directory encryption) may not be able to build scala-project due to a [known limitation](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac` concerning file name lengths.
 
 ## currently included projects ##
 * [akka](https://github.com/jboner/akka) (15k)
