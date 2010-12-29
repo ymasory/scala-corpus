@@ -2,15 +2,12 @@ import sbt._
 
 class ScalaCorpusProject(info: ProjectInfo) extends DefaultProject(info) {
 
-  /* scala-corpus project settings */
-  log.setLevel(Level.Warn)
-
   /* projects included in scala-corpus */
   lazy val scalaz = project("scalaz", "scalaz", new ScalazProject(_)) /* git 32757b4ed1f59dfbd121c9e483f06dada46ff792 */
   lazy val scalaquery = project("scala-query", "scala-query", new ScalaQueryProject(_)) /* git 0b9f9adfa15716ba4e5a659324000706ee1e42f7 */
   lazy val squeryl = project("squeryl", "squeryl", new SquerylProject(_)) /* git 0286ac918fd2e74f8f65e1cafe693e4d8f15f4ec */
   lazy val scalaswing = project("scala-swing", "scala-swing", new ScalaSwingProject(_)) /* git 5b45ba65a6afa15b6083bc4c0654d551a379e9a3 */
-  lazy val ensime = project("ensime", "ensime", new EnsimeProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
+  //lazy val ensime = project("ensime", "ensime", new EnsimeProject(_)) /* git b72d66ee73661735bc5a61e0d23874bbcaced76e */
   lazy val flashup = project("flashup", "flashup", new FlashupProject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
   lazy val smile = project("smile", "smile", new SmileProject(_)) /* git ee41070f87e2a99b2556ebde6b505c3dd54e7b88 */
   lazy val akka = project("akka", "akka", new AkkaProject(_)) /* git 57d0e85a9adeb088fbe4b2cb7140647cdbc1c432 */
