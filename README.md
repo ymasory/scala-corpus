@@ -6,10 +6,9 @@ Line counts are generated using [cloc](http://cloc.sourceforge.net/).
 
 ## building  ##
 This collection is built using [sbt](http://code.google.com/p/simple-build-tool/).
-    sbt update
     sbt test-compile
 
-NOTE: Some systems (e.g., Linux with home directory encryption) may not be able to build scala-project due to a [known limitation](http://lampsvn.epfl.ch/trac/scala/ticket/3623) with `scalac` concerning file name lengths.
+NOTE: Some systems (e.g., Linux with home directory encryption) may not be able to build scala-project due to a [known limitation](http://lampsvn.epfl.ch/trac/scala/ticket/3623) of `scalac` concerning file name lengths.
 
 ## currently included projects ##
 * [akka](https://github.com/jboner/akka) (15k)
