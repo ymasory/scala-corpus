@@ -20,6 +20,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
 * [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [smile](https://github.com/robey/smile) (3k)
+* [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
 * [flashup](https://github.com/ymasory/Flashup) (1k)
 
 ## project we are working on adding ##
@@ -42,7 +43,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
 * [scalaxb](https://github.com/eed3si9n/scalaxb) (6k)
-* [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
 * [norbert](https://github.com/rhavyn/norbert) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
