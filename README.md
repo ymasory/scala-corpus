@@ -39,8 +39,12 @@ NOTE: Some systems may not be able to build every sub-project due to a [known bu
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
 * [scalaxb](https://github.com/eed3si9n/scalaxb) (6k)
+* [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
+* [swap-scala](http://code.google.com/p/swap-scala/source/checkout) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
+* [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
+* [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
 ## cannot include: require external dependencies ##
 * [scala-intellij](http://git.jetbrains.org/?p=idea/scala-plugin.git) (67k)
