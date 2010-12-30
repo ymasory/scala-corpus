@@ -13,6 +13,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 ## currently included projects ##
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
 * [akka](https://github.com/jboner/akka) (15k)
+* [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
 * [scalaz](https://github.com/scalaz/scalaz) (12k)
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
@@ -33,7 +34,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [sgine](hg clone https://sgine.googlecode.com/hg/ sgine) (16k)
 * [akka-modules](https://github.com/jboner/akka-modules) (15k)
 * [gapt](http://code.google.com/p/gapt/source/checkout) (14k)
-* [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
 * [scalanlp](https://github.com/dlwh/scalanlp-core) (13k)
 * [scala-ide](http://www.assembla.com/wiki/show/scala-ide/Source_Code) (12k)
 * [uniscala](http://uniscala.net/mvn/source-repository.html) (10k)

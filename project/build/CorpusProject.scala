@@ -22,6 +22,7 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
   //   lazy val gridfs = project("casbah-gridfs","casbah-gridfs", new CorpusSubproject(_), core)
   // })
   lazy val ensime = project("ensime", "ensime", new CorpusSubproject(_)) /* git d3a4de5805e2b98fd0cb15783af6a6d4b83d535c */
+  lazy val factorie = project("factorie", "factorie", new CorpusSubproject(_)) /* hg 566:04f0c4db9013 */
   lazy val flashup = project("flashup", "flashup", new CorpusSubproject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
   lazy val gdata = project("gdata-scala-client", "gdata-scala-client", new CorpusSubproject(_)) /* svn r89 */
   lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_)) /* hg 376:23c7b8ffc0f1 */
