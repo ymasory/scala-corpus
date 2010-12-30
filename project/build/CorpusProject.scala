@@ -1,7 +1,7 @@
 import sbt._
 import Dummy._
 
-class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
+class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
 
   lazy val akka = project("akka", "akka", new CorpusSubproject(_) { /* git 57d0e85a9adeb088fbe4b2cb7140647cdbc1c432 */
     lazy val akka_actor = project("akka-actor", "akka-actor", new CorpusSubproject(_))
@@ -15,12 +15,12 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
       lazy val akka_sample_remote = project("akka-sample-remote", "akka-sample-remote", new CorpusSubproject(_), akka_remote)
     })
   })
-  // lazy val casbah = project("casbah", "casbah", new CorpusSubproject(_) { /* git 4c4e62442ba4bdf55388b139acb27e2d871dbe11 */
-  //   lazy val commons = project("casbah-commons", "casbah-commons", new CorpusSubproject(_))
-  //   lazy val core = project("casbah-core", "casbah-core", new CorpusSubproject(_), commons, query)
-  //   lazy val query = project("casbah-query", "casbah-query", new CorpusSubproject(_), commons)
-  //   lazy val gridfs = project("casbah-gridfs","casbah-gridfs", new CorpusSubproject(_), core)
-  // })
+  lazy val casbah = project("casbah", "casbah", new CorpusSubproject(_) { /* git 4c4e62442ba4bdf55388b139acb27e2d871dbe11 */
+    lazy val commons = project("casbah-commons", "casbah-commons", new CorpusSubproject(_))
+    lazy val core = project("casbah-core", "casbah-core", new CorpusSubproject(_), commons, query)
+    lazy val query = project("casbah-query", "casbah-query", new CorpusSubproject(_), commons)
+    lazy val gridfs = project("casbah-gridfs","casbah-gridfs", new CorpusSubproject(_), core)
+  })
   lazy val ensime = project("ensime", "ensime", new CorpusSubproject(_)) /* git d3a4de5805e2b98fd0cb15783af6a6d4b83d535c */
   lazy val factorie = project("factorie", "factorie", new CorpusSubproject(_)) /* hg 566:04f0c4db9013 */
   lazy val flashup = project("flashup", "flashup", new CorpusSubproject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
