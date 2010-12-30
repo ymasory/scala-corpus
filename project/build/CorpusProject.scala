@@ -25,6 +25,16 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
   lazy val factorie = project("factorie", "factorie", new CorpusSubproject(_)) /* hg 566:04f0c4db9013 */
   lazy val flashup = project("flashup", "flashup", new CorpusSubproject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
   lazy val gdata = project("gdata-scala-client", "gdata-scala-client", new CorpusSubproject(_)) /* svn r89 */
+  lazy val lift = project("lift", "lift", new CorpusSubproject(_) { /* git b4a29977c572327195f248762bbaf7173656bb51 */
+    lazy val liftbase = project("lift-base", "lift-base", new CorpusSubproject(_) {
+      lazy val common = project("lift-common", "lift-common", new CorpusSubproject(_))
+      lazy val actor = project("lift-actor", "lift-actor", new CorpusSubproject(_),  common)
+      lazy val json = project("lift-json", "lift-json", new CorpusSubproject(_))
+      lazy val json_ext = project("lift-json-ext", "lift-json-ext", new CorpusSubproject(_), json, common)
+      lazy val util = project("lift-util", "lift-util", new CorpusSubproject(_), actor, json)
+      lazy val webkit = project("lift-webkit", "lift-webkit", new CorpusSubproject(_), util)
+    })
+  })
   lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_)) /* hg 376:23c7b8ffc0f1 */
   lazy val scalatest = project("scalatest", "scalatest", new CorpusSubproject(_)) /* svn r2282 */
   lazy val scalaz = project("scalaz", "scalaz", new CorpusSubproject(_) with ScalazBoilerplate { /* git 32757b4ed1f59dfbd121c9e483f06dada46ff792 */
