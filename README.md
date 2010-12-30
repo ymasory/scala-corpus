@@ -13,6 +13,7 @@ For some reason `sbt` will print Java unchecked warnings in red as errors even t
 NOTE: Some systems (e.g., Linux with home directory encryption) may not be able to build scala-project due to a [known limitation](http://lampsvn.epfl.ch/trac/scala/ticket/3623) of `scalac` concerning file name lengths.
 
 ## currently included projects ##
+* [scalatest](http://www.scalatest.org/download) (50k)
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
 * [akka](https://github.com/jboner/akka) (15k)
 * [factorie](http://code.google.com/p/factorie/source/checkout) (13k)
@@ -31,7 +32,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 ## project we are working on adding ##
 * [scala](https://github.com/scala/scala) (177k)
 * [lift](https://github.com/lift/lift) (58k)
-* [scalatest](http://www.scalatest.org/download) (50k)
 * [apparat](http://code.google.com/p/apparat/source/checkout) (18k)
 * [scalate](https://github.com/scalate/scalate) (16k)
 * [sgine](hg clone https://sgine.googlecode.com/hg/ sgine) (16k)
