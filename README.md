@@ -5,8 +5,10 @@ This is large collection of Scala code being collected for testing static analys
 Line counts are generated using [cloc](http://cloc.sourceforge.net/).
 
 ## building  ##
-This collection is built using [sbt](http://code.google.com/p/simple-build-tool/).
+This collection is built using [sbt](http://code.google.com/p/simple-build-tool/). Compilation is exactly one step:
     sbt test-compile
+
+For some reason `sbt` will print Java unchecked warnings in red as errors even though they're just warnings. Don't be alarmed, the corpus will still compile.
 
 NOTE: Some systems (e.g., Linux with home directory encryption) may not be able to build scala-project due to a [known limitation](http://lampsvn.epfl.ch/trac/scala/ticket/3623) of `scalac` concerning file name lengths.
 
