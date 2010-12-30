@@ -32,6 +32,7 @@ class CorpusProject(info: ProjectInfo) extends DefaultProject(info) {
   lazy val scalaswing = project("scala-swing", "scala-swing", new CorpusSubproject(_)) /* git 5b45ba65a6afa15b6083bc4c0654d551a379e9a3 */
   lazy val scalaquery = project("scala-query", "scala-query", new CorpusSubproject(_)) /* git 0b9f9adfa15716ba4e5a659324000706ee1e42f7 */
   lazy val smile = project("smile", "smile", new com.twitter.sbt.StandardProject(_)) /* git ee41070f87e2a99b2556ebde6b505c3dd54e7b88 */
+  lazy val specs = project("specs", "specs", new CorpusSubproject(_)) /* svn r1368 */
   lazy val squeryl = project("squeryl", "squeryl", new CorpusSubproject(_)) /* git 0286ac918fd2e74f8f65e1cafe693e4d8f15f4ec */
 }
 

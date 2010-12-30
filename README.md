@@ -11,6 +11,7 @@ This collection is built using [sbt](http://code.google.com/p/simple-build-tool/
 NOTE: Some systems (e.g., Linux with home directory encryption) may not be able to build scala-project due to a [known limitation](http://lampsvn.epfl.ch/trac/scala/ticket/3623) of `scalac` concerning file name lengths.
 
 ## currently included projects ##
+* [specs](http://code.google.com/p/specs/source/checkout) (20k)
 * [akka](https://github.com/jboner/akka) (15k)
 * [scalaz](https://github.com/scalaz/scalaz) (12k)
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
@@ -27,7 +28,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scala](https://github.com/scala/scala) (177k)
 * [lift](https://github.com/lift/lift) (58k)
 * [scalatest](http://www.scalatest.org/download) (50k)
-* [specs](http://code.google.com/p/specs/source/checkout) (20k)
 * [apparat](http://code.google.com/p/apparat/source/checkout) (18k)
 * [scalate](https://github.com/scalate/scalate) (16k)
 * [sgine](hg clone https://sgine.googlecode.com/hg/ sgine) (16k)
