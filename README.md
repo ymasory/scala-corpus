@@ -18,12 +18,12 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scalariform](https://github.com/mdr/scalariform) (8k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
+* [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
 * [casbah](https://github.com/mongodb/casbah) (4k)
 * [ensime](https://github.com/aemoncannon/ensime) (4k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
 * [scala-migrations](http://code.google.com/p/scala-migrations/source/checkout) (3k)
 * [smile](https://github.com/robey/smile) (3k)
-* [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
 * [flashup](https://github.com/ymasory/Flashup) (1k)
 
 ## project we are working on adding ##
