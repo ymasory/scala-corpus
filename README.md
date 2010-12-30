@@ -45,7 +45,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scalaxb](https://github.com/eed3si9n/scalaxb) (6k)
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
 * [norbert](https://github.com/rhavyn/norbert) (5k)
-* [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
 ## cannot include: require some dependencies pre-installed on build system ##
@@ -57,5 +56,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 ## cannot include: require < 2.8.0 ##
 * [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (15k)
 * [swap-scala](http://code.google.com/p/swap-scala/source/checkout) (5k)
+* [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 * [configgy](https://github.com/robey/configgy) (4k)
 
