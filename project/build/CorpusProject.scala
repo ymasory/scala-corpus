@@ -52,7 +52,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
       lazy val scalate = project("lift-scalate", "lift-scalate", new CorpusSubproject(_))
       lazy val textile = project("lift-textile", "lift-textile", new CorpusSubproject(_))
       lazy val facebook = project("lift-facebook", "lift-facebook", new CorpusSubproject(_))
-      // lazy val amqp = project("lift-amqp", "lift-amqp", new CorpusSubproject(_))
+      lazy val amqp = project("lift-amqp", "lift-amqp", new CorpusSubproject(_))
       // lazy val xmpp = project("lift-xmpp", "lift-xmpp", new CorpusSubproject(_))
       // lazy val openid = project("lift-openid", "lift-openid", new CorpusSubproject(_))
       // lazy val oauth = project("lift-oauth", "lift-oauth", new CorpusSubproject(_))
