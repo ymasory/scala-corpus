@@ -40,7 +40,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
       lazy val jpa = project("lift-jpa", "lift-jpa", new CorpusSubproject(_))
       lazy val record = project("lift-record", "lift-record", new CorpusSubproject(_), mapper)
       lazy val couchdb = project("lift-couchdb", "lift-couchdb", new CorpusSubproject(_), record)
-      // lazy val mongodb = project("lift-mongodb", "lift-mongodb", new CorpusSubproject(_))
+      lazy val mongodb = project("lift-mongodb", "lift-mongodb", new CorpusSubproject(_))
       // lazy val mongodbRecord = project("lift-mongodb-record", "lift-mongodb-record",  new CorpusSubproject(_),  mongodb, record)      
     }, liftbase)
   })
