@@ -48,7 +48,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [uniscala](http://uniscala.net/mvn/source-repository.html) (10k)
 * [scala-refactoring](http://www.assembla.com/code/scala-refactoring/git/nodes?rev=master) (10k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
-* [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
 ## cannot include: require some dependencies pre-installed on build system ##
 * [scala-intellij](http://git.jetbrains.org/?p=idea/scala-plugin.git) (67k)
@@ -63,4 +62,5 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [swap-scala](http://code.google.com/p/swap-scala/source/checkout) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
 * [configgy](https://github.com/robey/configgy) (4k)
+* [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
