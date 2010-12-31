@@ -24,6 +24,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scala-stm](https://github.com/nbronson/scala-stm.git) (8k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
 * [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
+* [scalaxb](https://github.com/eed3si9n/scalaxb) (5k)
 * [casbah](https://github.com/mongodb/casbah) (4k)
 * [ensime](https://github.com/aemoncannon/ensime) (4k)
 * [scala-swing](https://github.com/ingoem/scala-swing) (4k)
@@ -45,7 +46,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scala-refactoring](http://www.assembla.com/code/scala-refactoring/git/nodes?rev=master) (10k)
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
-* [scalaxb](https://github.com/eed3si9n/scalaxb) (6k)
 * [norbert](https://github.com/rhavyn/norbert) (5k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 

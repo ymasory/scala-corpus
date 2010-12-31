@@ -66,6 +66,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
   lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_)) /* hg 376:23c7b8ffc0f1 */
   lazy val scalastm = project("scala-stm", "scala-stm", new CorpusSubproject(_)) /* git 660413806f41d0591bbcb51aa1c3828ae07b8409 */
   lazy val scalatest = project("scalatest", "scalatest", new CorpusSubproject(_)) /* svn r2282 */
+  lazy val scalaxb = project("scalaxb", "scalaxb", new CorpusSubproject(_)) /* git 39523b8cc7fab887cbb5841b982a2d8dc699e706 */
   lazy val scalaz = project("scalaz", "scalaz", new CorpusSubproject(_) with ScalazBoilerplate { /* git 32757b4ed1f59dfbd121c9e483f06dada46ff792 */
     override def mainSourceRoots = super.mainSourceRoots +++ srcManagedScala##
     override def compileAction = super.compileAction dependsOn(generateTupleW)
