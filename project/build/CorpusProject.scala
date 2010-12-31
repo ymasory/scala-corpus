@@ -65,6 +65,15 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
     })
     lazy val liftexamples = project("lift-examples", "lift-examples", new CorpusSubproject(_) {
       lazy val example = project("example", "example", new CorpusSubproject(_))
+      lazy val jpademo = project("JPADemo", "JAPDemo", new CorpusSubproject(_))
+      // lazy val osgni = project("examples-osgi", "examples-osgi", new CorpusSubproject(_))
+      // lazy val flot = project("flotDemo", "flotDemo", new CorpusSubproject(_))
+      // lazy val hellodarwin = project("hellodarwin", "hellodarwin", new CorpusSubproject(_))
+      // lazy val hellofbc = project("hellofbc", "hellofbc", new CorpusSubproject(_))
+      // lazy val hellolift = project("hellolift", "hellolift", new CorpusSubproject(_))
+      // lazy val helloscalate = project("helloscalate", "helloscalate", new CorpusSubproject(_))
+      // lazy val httoauth = project("http-authentication", "http-authentication", new CorpusSubproject(_))
+      // lazy val skittr = project("skittr", "skittr", new CorpusSubproject(_))
     })
   })
   lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_)) /* hg 376:23c7b8ffc0f1 */
