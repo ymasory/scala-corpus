@@ -46,7 +46,6 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [scala-refactoring](http://www.assembla.com/code/scala-refactoring/git/nodes?rev=master) (10k)
 * [kafka](https://github.com/kafka-dev/kafka) (7k)
 * [circumflex](https://github.com/inca/circumflex) (6k)
-* [norbert](https://github.com/rhavyn/norbert) (5k)
 * [sweetscala](http://code.google.com/p/sweetscala/source/checkout) (3k)
 
 ## cannot include: require some dependencies pre-installed on build system ##
@@ -57,6 +56,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 
 ## cannot include: require < 2.8.0 ##
 * [sbt](http://code.google.com/p/simple-build-tool/source/checkout) (15k)
+* [norbert](https://github.com/rhavyn/norbert) (5k)
 * [scalax.io](https://github.com/eengbrec/Scalax.IO) (5k)
 * [swap-scala](http://code.google.com/p/swap-scala/source/checkout) (5k)
 * [scalala](http://code.google.com/p/scalala/source/checkout) (4k)
