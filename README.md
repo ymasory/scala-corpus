@@ -21,6 +21,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 * [kiama](http://code.google.com/p/kiama/source/checkout) (10k)
 * [squeryl](https://github.com/max-l/Squeryl)  (9k)
 * [scalariform](https://github.com/mdr/scalariform) (8k)
+* [scala-stm](https://github.com/nbronson/scala-stm.git) (8k)
 * [scala-query](https://github.com/szeiger/scala-query) (7k)
 * [gdata-scala-client](http://code.google.com/p/gdata-scala-client/source/checkout) (5k)
 * [casbah](https://github.com/mongodb/casbah) (4k)
