@@ -27,6 +27,14 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
   lazy val gdata = project("gdata-scala-client", "gdata-scala-client", new CorpusSubproject(_)) /* svn r89 */
   lazy val kiama = project("kiama", "kiama", new CorpusSubproject(_)) /* hg 425:17ec8a9859e8 */
   lazy val lift = project("lift", "lift", new CorpusSubproject(_) { /* git b4a29977c572327195f248762bbaf7173656bb51 */
+    lazy val liftarchetypes = project("lift-archetypes", "lift-archetypes", new CorpusSubproject(_) {
+      // lazy val basic = project("lift-archetype-basic", "lift-archetype-basic", new CorpusSubproject(_))
+      // lazy val jpablank = project("lift-archetype-jpa-blank", "lift-archetype-jpa-blank", new CorpusSubproject(_))
+      // lazy val blank = project("lift-archetype-blank", "lift-archetype-blank", new CorpusSubproject(_))
+      // lazy val jpablanksingle = project("lift-archetype-jpa-blank-single", "lift-archetype-jpa-blank-single", new CorpusSubproject(_))
+      // lazy val jpabasic = project("lift-archetype-jpa-basic", "lift-archetype-jpa-basic", new CorpusSubproject(_))
+      // lazy val sbt = project("lift-archetype-sbt", "lift-archetype-sbt", new CorpusSubproject(_))
+    })
     lazy val liftframework = project("lift-framework", "lift-framework", new CorpusSubproject(_) {
       lazy val liftbase = project("lift-base", "lift-base", new CorpusSubproject(_) {
         lazy val common = project("lift-common", "lift-common", new CorpusSubproject(_))
