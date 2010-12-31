@@ -58,7 +58,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
       lazy val oauth = project("lift-oauth", "lift-oauth", new CorpusSubproject(_))
       lazy val oauthMapper = project("lift-oauth-mapper", "lift-oauth-mapper", new CorpusSubproject(_), oauth)
       lazy val paypal = project("lift-paypal", "lift-paypal", new CorpusSubproject(_))
-      // lazy val jta = project("lift-jta", "lift-jta", new CorpusSubproject(_))
+      lazy val jta = project("lift-jta", "lift-jta", new CorpusSubproject(_))
       // lazy val imaging = project("lift-imaging", "lift-imaging", new CorpusSubproject(_))
       // lazy val ldap = project("lift-ldap", "lift-ldap", new CorpusSubproject(_))
     }, liftpersist)
