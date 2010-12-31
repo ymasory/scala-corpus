@@ -2,7 +2,7 @@
 ## about ##
 This is large collection of Scala code being collected for testing static analysis tools such as [Alacs](https://github.com/alacscala/alacs).
 
-There are currently *238397* lines of Scala in the corpus.
+There are currently **238397** lines of Scala in the corpus.
 
 Line counts are generated using [cloc](http://cloc.sourceforge.net/).
 
