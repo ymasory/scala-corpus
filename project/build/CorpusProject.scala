@@ -46,7 +46,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
     lazy val liftmodules = project("lift-modules", "lift-modules", new CorpusSubproject(_) {
       lazy val testkit = project("lift-testkit", "lift-testkit", new CorpusSubproject(_))
       lazy val wizard  = project("lift-wizard", "lift-wizard", new CorpusSubproject(_))
-      // lazy val widgets = project("lift-widgets", "lift-widgets", new CorpusSubproject(_))
+      lazy val widgets = project("lift-widgets", "lift-widgets", new CorpusSubproject(_))
       // lazy val machine = project("lift-machine", "lift-machine", new CorpusSubproject(_))
       // lazy val scalate = project("lift-scalate", "lift-scalate", new CorpusSubproject(_))
       // lazy val textile = project("lift-textile", "lift-textile", new CorpusSubproject(_))
