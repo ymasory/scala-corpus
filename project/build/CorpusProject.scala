@@ -60,7 +60,6 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
       lazy val paypal = project("lift-paypal", "lift-paypal", new CorpusSubproject(_))
       lazy val jta = project("lift-jta", "lift-jta", new CorpusSubproject(_))
       lazy val imaging = project("lift-imaging", "lift-imaging", new CorpusSubproject(_))
-      // lazy val ldap = project("lift-ldap", "lift-ldap", new CorpusSubproject(_))
     }, liftpersist)
   })
   lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_)) /* hg 376:23c7b8ffc0f1 */
