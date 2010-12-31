@@ -41,7 +41,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
       lazy val record = project("lift-record", "lift-record", new CorpusSubproject(_), mapper)
       lazy val couchdb = project("lift-couchdb", "lift-couchdb", new CorpusSubproject(_), record)
       lazy val mongodb = project("lift-mongodb", "lift-mongodb", new CorpusSubproject(_))
-      // lazy val mongodbRecord = project("lift-mongodb-record", "lift-mongodb-record",  new CorpusSubproject(_),  mongodb, record)      
+      lazy val mongodbRecord = project("lift-mongodb-record", "lift-mongodb-record",  new CorpusSubproject(_),  mongodb, record)
     }, liftbase)
   })
   lazy val scalamigrations = project("scala-migrations", "scala-migrations", new CorpusSubproject(_)) /* hg 376:23c7b8ffc0f1 */
