@@ -25,6 +25,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
   lazy val factorie = project("factorie", "factorie", new CorpusSubproject(_)) /* hg 566:04f0c4db9013 */
   lazy val flashup = project("flashup", "flashup", new CorpusSubproject(_)) /* git 61aaf4159ef739068295efa03dd08ccbde76b600 */
   lazy val gdata = project("gdata-scala-client", "gdata-scala-client", new CorpusSubproject(_)) /* svn r89 */
+  lazy val kiama = project("kiama", "kiama", new CorpusSubproject(_)) /* hg 425:17ec8a9859e8 */
   lazy val lift = project("lift", "lift", new CorpusSubproject(_) { /* git b4a29977c572327195f248762bbaf7173656bb51 */
     lazy val liftbase = project("lift-base", "lift-base", new CorpusSubproject(_) {
       lazy val common = project("lift-common", "lift-common", new CorpusSubproject(_))
