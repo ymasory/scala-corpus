@@ -16,6 +16,7 @@ NOTE: Some systems (e.g., Linux with home directory encryption) may not be able 
 
 ## currently included projects ##
 * [scalatest](http://www.scalatest.org/download) (50k)
+* [blueeyes](https://github.com/jdegoes/blueeyes.git) (21k)
 * [specs](http://code.google.com/p/specs/source/checkout) (20k)
 * [akka](https://github.com/jboner/akka) (14k)
 * [factorie](http://code.google.com/p/factorie/source/checkout) (13k)

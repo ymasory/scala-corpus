@@ -15,6 +15,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
       lazy val akka_sample_remote = project("akka-sample-remote", "akka-sample-remote", new CorpusSubproject(_), akka_remote)
     })
   })
+  lazy val blueeyes = project("blueeyes", "blueeyes", new CorpusSubproject(_)) /* git 978d6698ff4469bf128fe9dd0142c874bba358ef */
   lazy val casbah = project("casbah", "casbah", new CorpusSubproject(_) { /* git 4c4e62442ba4bdf55388b139acb27e2d871dbe11 */
     lazy val commons = project("casbah-commons", "casbah-commons", new CorpusSubproject(_))
     lazy val core = project("casbah-core", "casbah-core", new CorpusSubproject(_), commons, query)
