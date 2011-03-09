@@ -109,9 +109,11 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
 
 
 object Dummy { //just so sbt doesn't complain about multiple project definitions
-  class CorpusSubproject(info: ProjectInfo) extends DefaultProject(info) {
+  class CorpusSubproject(info: ProjectInfo) extends DefaultProject(info) with AutoCompilerPlugins {
+    // val alacs = compilerPlugin("alacscala" % "alacs" % "?")
     override def compileOptions =
-      super.compileOptions ++ Seq("-deprecation", "-unchecked").map(CompileOption(_))
+      super.compileOptions ++ compileOptions("-deprecation", "-unchecked")
+      // super.compileOptions ++ compileOptions("-deprecation", "-unchecked", "-Xplugin:alacs", "-Xplugin-require:alacs")
     override def javaCompileOptions = JavaCompileOption("-Xlint:unchecked") :: super.javaCompileOptions.toList
   }
 }
