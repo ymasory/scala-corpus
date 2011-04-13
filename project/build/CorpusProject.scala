@@ -110,7 +110,8 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
 
 object Dummy { //just so sbt doesn't complain about multiple project definitions
   class CorpusSubproject(info: ProjectInfo) extends DefaultProject(info) with AutoCompilerPlugins {
-    // val alacs = compilerPlugin("alacscala" % "alacs" % "?")
+    val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
+    // val alacs = compilerPlugin("com.github" % "alacs" % "0.0.0")
     override def compileOptions =
       super.compileOptions ++ compileOptions("-deprecation", "-unchecked")
       // super.compileOptions ++ compileOptions("-deprecation", "-unchecked", "-Xplugin:alacs", "-Xplugin-require:alacs")
