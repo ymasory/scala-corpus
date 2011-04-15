@@ -2,6 +2,8 @@ import sbt._
 
 class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
 
+  override def parallelExecution = true
+
   lazy val akka = project("akka", "akka", new CorpusSubproject(_) { /* git 57d0e85a9adeb088fbe4b2cb7140647cdbc1c432 */
     lazy val akka_actor = project("akka-actor", "akka-actor", new CorpusSubproject(_))
     lazy val akka_stm = project("akka-stm", "akka-stm", new CorpusSubproject(_), akka_actor)
