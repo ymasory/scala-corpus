@@ -114,7 +114,7 @@ protected  class CorpusSubproject(info: ProjectInfo) extends DefaultProject(info
   // val alacs = compilerPlugin("com.github" % "alacs" % "0.0.0")
   override def compileOptions =
     super.compileOptions ++ compileOptions("-deprecation", "-unchecked")
-    // super.compileOptions ++ compileOptions("-deprecation", "-unchecked", "-Xplugin:alacs", "-Xplugin-require:alacs")
+    // super.compileOptions ++ compileOptions("-Xplugin:alacs", "-Xplugin-require:alacs")
   override def javaCompileOptions = JavaCompileOption("-Xlint:unchecked") :: super.javaCompileOptions.toList
 }
 
