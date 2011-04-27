@@ -112,7 +112,7 @@ class CorpusProject(info: ProjectInfo) extends ParentProject(info) {
 protected  class CorpusSubproject(info: ProjectInfo) extends DefaultProject(info) with AutoCompilerPlugins {
   val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
   val alacs = compilerPlugin("com.github.alacs" %% "alacs" % "0.0.0-SNAPSHOT")
-  override def compileOptions = super.compileOptions ++ compileOptions("-deprecation", "-unchecked")
-  override def javaCompileOptions = JavaCompileOption("-Xlint:unchecked") :: super.javaCompileOptions.toList
+  // override def compileOptions = super.compileOptions ++ compileOptions("-deprecation", "-unchecked")
+  override def javaCompileOptions = JavaCompileOption("-Xlint:none") :: super.javaCompileOptions.toList
 }
 
